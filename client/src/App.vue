@@ -9,7 +9,7 @@ import TopContainer from './components/TopContainer.vue';
   <div class="w-full h-screen grid grid-cols-[230px_1fr] grid-rows-[50px_1fr]">
     <div class="border border-gray-100 flex justify-center items-center gap-2">
       <i class="fa-solid fa-landmark"></i>
-      <span class="text-gray-600 text-2xl select-none">学校通知</span>
+      <span class="text-gray-600 text-2xl select-none">校通达</span>
     </div>
     <!-- 顶部 -->
     <div class="border border-gray-100">

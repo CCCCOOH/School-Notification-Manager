@@ -9,9 +9,9 @@
     <!-- 切换通知范围 -->
     <Teleport to="#topSlot">
       <ul class="h-full flex items-center gap-3 ml-2">
-        <li class="hover:border-b-2 border-sky-500 p-1 transition cursor-pointer">学校通知</li>
-        <li class="hover:border-b-2 border-sky-500 p-1 transition cursor-pointer">学院通知</li>
-        <li class="hover:border-b-2 border-sky-500 p-1 transition cursor-pointer">班级通知</li>
+        <li :class="ClassList.juicyTabLi">学校通知</li>
+        <li :class="ClassList.juicyTabLi">学院通知</li>
+        <li :class="ClassList.juicyTabLi">班级通知</li>
       </ul>
     </Teleport>
   </div>
@@ -20,6 +20,10 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import NotifyCard from '@/components/NotifyCard.vue';
+
+const ClassList = reactive({
+  juicyTabLi: "hover:-translate-y-2 duration-200 hover:rotate-5 ease-in-out hover:border-b-2 border-sky-500 text-gray-500 p-1 transition cursor-pointer"
+})
 
 const data = ref([
   {
