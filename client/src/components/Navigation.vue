@@ -33,7 +33,7 @@ let menu = ref([
   {
     id: 'notify',
     name: '通知',
-    url: '/notify',
+    url: '/notify/class',
     icon: 'fa-solid fa-circle-exclamation'
   },
   {

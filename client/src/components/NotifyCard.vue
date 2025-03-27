@@ -9,8 +9,8 @@
         <!-- 通知内容 -->
         <p class="line-clamp-3 text-gray-600">{{ content }}</p>
         <!-- 标签列表 -->
-        <div class="h-10 flex items-center gap-2">
-          <span :class="levelClass[level]">
+        <div class="h-10 flex items-center gap-2 justify-start">
+          <span v-if="levelClass[level]" :class="levelClass[level]">
             {{ levelDict[level] }}
           </span>
           <span class="transition text-gray-600 border p-1 rounded hover:text-white hover:bg-gray-600" v-for="category in categories" :key="category">{{ category }}</span>
@@ -33,15 +33,15 @@ const {
 } = data;
 
 const levelDict = reactive({
-  1: '紧急通知',
+  1: '优先通知',
   2: '重要通知',
-  3: '普通通知',
+  3: '一般通知',
 })
 
 const levelClass = reactive({
-  1: 'transition text-red-700 border p-1 rounded hover:text-white hover:bg-red-700',
-  2: 'transition text-purple-700 border p-1 rounded hover:text-white hover:bg-purple-700',
-  3: 'transition text-blue-700 border p-1 rounded hover:text-white hover:bg-blue-700',
+  1: 'transition hover:bg-white hover:text-red-700 border p-1 rounded text-white bg-red-700',
+  2: 'transition hover:bg-white hover:text-purple-700 border p-1 rounded text-white bg-purple-700',
+  3: 'transition hover:bg-white hover:text-blue-700 border p-1 rounded text-white bg-blue-700',
 })
 
 </script>

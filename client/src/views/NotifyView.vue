@@ -1,120 +1,33 @@
 <template>
   <!-- 今日通知整体面板 -->
-  <div id="todayContainer" class="h-full w-full p-1 flex justify-end">
-    <!-- 通知列表 -->
-    <ul class="transition flex gap-5 p-3 overflow-auto flex-wrap">
-      <!-- 单个通知 -->
-      <NotifyCard v-for="(item) in data" :data="item" :key="item" class="w-100"/>
-    </ul>
+  <div id="todayContainer" class="h-full w-full p-1 flex justify-start">
     <!-- 切换通知范围 -->
     <Teleport to="#topSlot">
       <ul class="h-full flex items-center gap-3 ml-2">
-        <li :class="ClassList.juicyTabLi">学校通知</li>
-        <li :class="ClassList.juicyTabLi">学院通知</li>
-        <li :class="ClassList.juicyTabLi">班级通知</li>
+        <router-link :to="{ name: 'class' }">
+          <li :class="ClassList.juicyTabLi">班级通知</li>
+        </router-link>
+        
+        <router-link :to="{ name: 'college' }">
+          <li :class="ClassList.juicyTabLi">学院通知</li>
+        </router-link>
+
+        <router-link :to="{ name: 'school' }">
+          <li :class="ClassList.juicyTabLi">学校通知</li>
+        </router-link>
       </ul>
     </Teleport>
+    <!-- 通知列表 -->
+ 
+    <router-view></router-view>
+    
   </div>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
-import NotifyCard from '@/components/NotifyCard.vue';
 
 const ClassList = reactive({
-  juicyTabLi: "hover:-translate-y-2 duration-200 hover:rotate-5 ease-in-out hover:border-b-2 border-sky-500 text-gray-500 p-1 transition cursor-pointer"
+  juicyTabLi: "hover:-translate-y-2 duration-300 ease-in-out hover:border-b-2 border-sky-500 text-gray-500 p-1 transition cursor-pointer"
 })
-
-const data = ref([
-  {
-    title: '计算机设计大赛通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。`,
-    categories: [
-      '第二课堂', '体育'
-    ]
-  },
-  {
-    title: '心灵阳光协会面试通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂', '体育'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 2,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 3,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 2,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-  {
-    title: '期中考试通知',
-    time: '2025-12-23',
-    level: 1,
-    content: `经过长时间的努力探索与实践，2024年度国家级、自治区级大学生创新训练计划项目已进入关键阶段。现在，一场精彩绝伦的模拟结项答辩即将震撼上演！答辩现场，各团队将通过精美的PPT、生动的讲解，全方位展示项目的研究背景、创新点、实施过程和最终成果。专业评委们将从项目的科学性、创新性、实用性等多个维度进行犀利点评，提出宝贵建议。这不仅是一场成果的展示，更是一次思想的碰撞和学术的交流。`,
-    categories: [
-      '第二课堂'
-    ]
-  },
-])
 </script>
