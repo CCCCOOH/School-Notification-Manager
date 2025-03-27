@@ -9,24 +9,14 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
-      path: '/today',
-      name: 'today',
-      component: () => import('../views/TodayView.vue')
+      path: '/notify',
+      name: 'notify',
+      component: () => import('../views/NotifyView.vue')
     },
     {
-      path: '/week',
-      name: 'week',
-      component: () => import('../views/WeekView.vue')
-    },
-    {
-      path: '/month',
-      name: 'month',
-      component: () => import('../views/MonthView.vue')
-    },
-    {
-      path: '/history',
-      name: 'history',
-      component: () => import('../views/HIstoryView.vue')
+      path: '/manage',
+      name: 'manage',
+      component: () => import('../views/ManageView.vue')
     },
   ],
 })

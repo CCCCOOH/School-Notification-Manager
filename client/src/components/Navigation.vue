@@ -9,9 +9,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const activeTag = ref('home')
+
+const setActiveTag = () => {
+  let path = location.pathname.split('/')[1];
+  if (!path) return;  // 如果没有path说明在首页，返回
+  activeTag.value = path;
+}
+
+onMounted(() => {
+  setActiveTag();
+})
 
 let menu = ref([
   {
@@ -21,28 +31,16 @@ let menu = ref([
     icon: 'fa-solid fa-house'
   },
   {
-    id: 'today',
-    name: '今日',
-    url: '/today',
+    id: 'notify',
+    name: '通知',
+    url: '/notify',
     icon: 'fa-solid fa-circle-exclamation'
   },
   {
-    id: 'week',
-    name: '本周',
-    url: '/week',
-    icon: 'fa-solid fa-calendar-days'
-  },
-  {
-    id: 'month',
-    name: '本月',
-    url: '/month',
-    icon: 'fa-solid fa-calendar'
-  },
-  {
-    id: 'history',
-    name: '历史',
-    url: '/history',
-    icon: 'fa-solid fa-clock'
+    id: 'manage',
+    name: '管理',
+    url: '/manage',
+    icon: 'fa fa-envelope-open'
   },
 ])
 </script>

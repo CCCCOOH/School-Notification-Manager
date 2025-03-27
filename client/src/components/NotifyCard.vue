@@ -8,16 +8,18 @@
         <span class="text-sky-700 hover:text-sky-600 transition">时间：{{ time }}</span>
         <!-- 通知内容 -->
         <p class="line-clamp-3 text-gray-600">{{ content }}</p>
-        <div class="h-10 flex items-center">
+        <!-- 标签列表 -->
+        <div class="h-10 flex items-center gap-2">
           <span :class="levelClass[level]">
             {{ levelDict[level] }}
           </span>
+          <span class="transition text-gray-600 border p-1 rounded hover:text-white hover:bg-gray-600" v-for="category in categories" :key="category">{{ category }}</span>
         </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
+import { reactive } from "vue";
 
 const {data} = defineProps(['data'])
 // 从props数组中拿到data变量
@@ -26,7 +28,8 @@ const {
   title,
   time,
   content,
-  level
+  level,
+  categories
 } = data;
 
 const levelDict = reactive({
