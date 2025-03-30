@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const ClassModel = require('../models/Class')
-const ObjectId = mongoose.Schema.Types.ObjectId
+const ClassModel = require('../models/Class');
+const UserModel = require('../models/User');
 
 // 查询所有班级
 module.exports.listClass = async (req, res) => {
@@ -38,7 +38,7 @@ module.exports.removeClass = async (req, res) => {
         _id: class_id
       }]
     })
-    
+
     if (row) {
       res.send({
         code: 200,
@@ -59,7 +59,13 @@ module.exports.removeClass = async (req, res) => {
 // 修改班级
 module.exports.updateClass = async (req, res) => {
   try {
-    const { user_id, class_id, className, description, updatedAt } = req.body;
+    const {
+      user_id,
+      class_id,
+      className,
+      description,
+      updatedAt
+    } = req.body;
 
     const row = await ClassModel.findOne({
       $and: [{
@@ -93,4 +99,107 @@ module.exports.updateClass = async (req, res) => {
 module.exports.clearClass = async (req, res) => {
   await ClassModel.deleteMany()
   res.send("清空班级成功")
+}
+
+module.exports.addNotify = async (req, res) => {
+  try {
+    const {
+      class_id,
+      user_id,
+      title,
+      time,
+      content,
+      level,
+      categories
+    } = req.body;
+    const row = await ClassModel.findOne({
+      $and: [{
+          _id: class_id
+        },
+        {
+          createdBy: user_id
+        }
+      ]
+    });
+    if (row) {
+      row.notifies.push({
+        title,
+        time,
+        content,
+        level,
+        categories
+      })
+      await row.save();
+      res.send({
+        msg: "添加成功",
+        row
+      })
+    } else {
+      res.status(500).send("添加失败")
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("添加失败")
+  }
+}
+
+module.exports.modifyNotify = async (req, res) => {
+  try {
+    const {
+      class_id,
+      user_id,
+      notify_id,
+      title,
+      time,
+      content,
+      level,
+      categories
+    } = req.body;
+    const row = await ClassModel.findOne({
+      $and: [{
+          _id: class_id
+        },
+        {
+          createdBy: user_id
+        }
+      ]
+    });
+    if (row) {
+      let notify = row.notifies.find(notify => notify._id.equals(notify_id));
+      if (!notify) {
+        res.status(500).send("修改失败");
+        return;
+      }
+      notify.title = title;
+      notify.time = time
+      notify.content = content
+      notify.level = level
+      notify.categories = categories
+      await row.save();
+      res.send({
+        msg: "修改成功",
+        notify
+      })
+    } else {
+      res.status(500).send("修改失败")
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("修改失败")
+  }
+}
+
+module.exports.listNotify = async (req, res) => {
+  const { user_id } = req.query;
+  let user_info = await UserModel.findById(user_id);
+  let user_classes = user_info.classes;
+  let select_list = [];
+  
+  let row = await ClassModel.find({
+    $or: [
+
+    ]
+  })
+  res.send(user_classes)
+  return;
 }

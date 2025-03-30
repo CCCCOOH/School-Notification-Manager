@@ -4,7 +4,7 @@ console.log("创建班级模型中...");
 
 const ClassSchema = new mongoose.Schema({
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Types.ObjectId,
     ref: 'user',
     required: true
   },
@@ -71,6 +71,26 @@ const ClassSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now()
+  },
+  notifies: {
+    type: [{
+      title: {
+        type: String,
+        required: true
+      },
+      content: String,
+      time: {
+        type: Date,
+        default: Date.now()
+      },
+      level: {
+        type: Number,
+        default: 4
+      },
+      categories: {
+        type: [String]
+      }
+    }]
   }
 });
 
