@@ -59,7 +59,7 @@ module.exports.removeClass = async (req, res) => {
 // 修改班级
 module.exports.updateClass = async (req, res) => {
   try {
-    const { user_id, class_id, className, description, managers, members, updatedAt } = req.body;
+    const { user_id, class_id, className, description, updatedAt } = req.body;
 
     const row = await ClassModel.findOne({
       $and: [{
@@ -68,13 +68,15 @@ module.exports.updateClass = async (req, res) => {
         _id: class_id
       }]
     })
-    
-    console.log(row);
 
     if (row) {
+      row.className = className;
+      row.description = description;
+      row.updatedAt = Date.now();
+      await row.save();
       res.send({
         code: 200,
-        msg: '删除成功',
+        msg: '更新成功',
         row
       })
       return;
