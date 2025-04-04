@@ -16,30 +16,6 @@ const ClassSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  managers: {
-    type: [{
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
-      },
-      assignedAt: {
-        type: Date,
-        default: Date.now()
-      }
-    }],
-    default: function () {
-      return [{
-        userId: this.createdBy,
-        assignedAt: Date.now()
-      }]
-    },
-    validate: {
-      validator: function (v) {
-        return v.length > 0
-      },
-      message: '创建的班级至少有一个成员'
-    },
-  },
   members: {
     type: [{
       userId: {
@@ -49,6 +25,14 @@ const ClassSchema = new mongoose.Schema({
       assignedAt: {
         type: Date,
         default: Date.now()
+      },
+      role: {
+        type: String,
+        default: 'member',
+        enum: {
+          values: ['manager', 'member'],
+          message: '{VALUE}不是有效的角色'
+        }
       }
     }],
     default: function () {

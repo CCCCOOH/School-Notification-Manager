@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
   },
   fullname: {
     type: String,
-    required: true
+    default: () => this.username
   },
   classes: [{
     classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },

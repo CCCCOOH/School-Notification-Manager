@@ -6,34 +6,36 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue'),
+      component: () => import('../views/LoginView.vue'),
     },
     {
-      path: '/notify',
-      name: 'notify',
-      component: () => import('../views/NotifyView.vue'),
+      path: '/user',
+      name: 'user',
+      component: () => import('../views/UserView.vue'),
       children: [
+        {
+          path: 'notify',
+          name: 'notify',
+          component: () => import('../views/NotifyViews/ShowNotify.vue')
+        },
         {
           path: 'class',
           name: 'class',
-          component: () => import('../views/NotifyViews/ClassNotify.vue')
-        },
-        {
-          path: 'school',
-          name: 'school',
-          component: () => import('../views/NotifyViews/SchoolNotify.vue')
-        },
-        {
-          path: 'college',
-          name: 'college',
-          component: () => import('../views/NotifyViews/CollegeNotify.vue')
+          component: () => import('../views/ClassView.vue'),
+          children: [
+            {
+              path: 'list',
+              name: 'classList',
+              component: () => import('../views/ClassViews/ClassList.vue')
+            },
+            {
+              path: 'create',
+              name: 'createClass',
+              component: () => import('../views/ClassViews/Create.vue')
+            },
+          ]
         },
       ]
-    },
-    {
-      path: '/manage',
-      name: 'manage',
-      component: () => import('../views/ManageView.vue'),
     },
   ],
 })

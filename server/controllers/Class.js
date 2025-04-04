@@ -17,7 +17,7 @@ module.exports.createClass = async (req, res) => {
   try {
     const new_class = await ClassModel(req.body)
     await new_class.save();
-    res.send(new_class)
+    res.send(new_class);
   } catch (error) {
     console.error(error);
     res.status(500).send('添加班级失败')

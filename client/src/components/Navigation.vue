@@ -25,22 +25,16 @@ onMounted(() => {
 
 let menu = ref([
   {
-    id: 'home',
-    name: '首页',
-    url: '/',
-    icon: 'fa-solid fa-house'
-  },
-  {
     id: 'notify',
     name: '通知',
-    url: '/notify/class',
+    url: '/user/notify',
     icon: 'fa-solid fa-circle-exclamation'
   },
   {
-    id: 'manage',
-    name: '管理',
-    url: '/manage',
-    icon: 'fa fa-envelope-open'
+    id: 'class',
+    name: '班级',
+    url: '/user/class',
+    icon: 'fas fa-window-restore'
   },
 ])
 </script>
