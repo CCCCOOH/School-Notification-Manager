@@ -47,12 +47,19 @@ module.exports.removeClass = async (req, res) => {
       })
       return;
     } else {
-      res.status(500).send('删除失败')
+      res.send({
+        code: 500,
+        msg: '删除失败'
+      })
       return;
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send('删除失败')
+    res.send({
+      code: 500,
+      msg: '删除失败'
+    })
+    return;
   }
 }
 
@@ -87,7 +94,10 @@ module.exports.updateClass = async (req, res) => {
       })
       return;
     } else {
-      res.status(500).send('删除失败')
+      res.send({
+        code: 500,
+        msg: '更新失败'
+      })
       return;
     }
   } catch (err) {

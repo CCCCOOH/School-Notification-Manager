@@ -7,14 +7,20 @@
       class="border-b-2 rounded p-2 outline-none hover:bg-gray-100 focus:border-sky-500">
     <button @click="onCreateClassButton"
       class="bg-sky-600 rounded w-20 text-white hover:bg-sky-500 cursor-pointer">创建</button>
+      <Modal v-model="modalData" />
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/user';
 import { inject, reactive } from 'vue';
+import Modal from '@/components/Modal.vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const axios = inject('axios')
+const confirm = inject('confirm')
+const close = inject('close')
 const userStore = useUserStore();
 
 const createForm = reactive({
@@ -22,10 +28,23 @@ const createForm = reactive({
   description: ''
 })
 
+const modalData = reactive({
+  show: false,
+  msg: ''
+
+})
+
+function message(str) {
+  modalData.show = true;
+  modalData.msg = str
+}
+
 const onCreateClassButton = async () => {
   try {
     if (createForm.className == '') {
-      alert('请输入标题...')
+      confirm('请输入标题...', '', true, () => {
+        close();
+      })
       return;
     }
     const userDatas = useUserStore().userDatas;
@@ -36,9 +55,12 @@ const onCreateClassButton = async () => {
       createdBy: user_id
     })
     if (res.status == 200) {
-      alert('创建成功')
+      confirm('创建成功', '', true, () => {
+        router.push({name: 'classList'})
+        close()
+      })
     } else {
-      alert('创建失败')
+      confirm('创建失败')
     }
   } catch (error) {
     console.error(error);
