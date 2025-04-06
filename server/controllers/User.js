@@ -118,7 +118,7 @@ module.exports.listClasses = async (req, res) => {
         rows: []
       })
     }
-    const class_ids = rows.classes.map(item => item.classId)
+    const class_ids = rows.classes.map(item => item._id)
     const classes = await ClassModel.find({
       _id: {
         $in: class_ids

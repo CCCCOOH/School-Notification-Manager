@@ -49,7 +49,9 @@ async function onAddButton() {
   const classInfo = classDetailStore.manageClassInfo;
   const class_id = classInfo._id;
   const user_id = userStore.userDatas._id;
-  addForm.categories = categoriesInput.value.split(' ');
+  if (categoriesInput.value !== '') {
+    addForm.categories = categoriesInput.value.split(' ');
+  }
 
   const res = await axios.post('class/notify/add', {
     title: addForm.title,
@@ -59,7 +61,8 @@ async function onAddButton() {
     class_id,
     user_id
   })
-
+  console.log(addForm.categories);
+  
   if (res.data.code == 200) {
     confirm('提示', res.data.msg, true, () => {
       close();

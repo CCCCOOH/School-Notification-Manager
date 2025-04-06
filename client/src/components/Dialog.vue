@@ -14,11 +14,11 @@
         <hr class="w-full text-gray-200" v-show="options.showButton">
         <div class="text-gray-700 font-semibold">
           <p class="text-center mb-2">{{ options.msg }}</p>
-          <div v-if="options.showButton" class="flex gap-2">
+          <div v-if="options.showButton" class="flex gap-2 justify-center">
             <button @click="options.callBack"
-              class="block bg-sky-500 rounded-2xl px-3 py-1 text-white hover:bg-sky-400 active:bg-red-600">确定</button>
+              class="block bg-sky-500 rounded px-3 py-1 text-white hover:bg-sky-400 active:bg-red-600">确定</button>
             <button @click="visible = false"
-              class="block bg-sky-500 rounded-2xl px-3 py-1 text-white hover:bg-sky-400">取消</button>
+              class="block bg-sky-500 rounded px-3 py-1 text-white hover:bg-sky-400 active:bg-blue-600">取消</button>
           </div>
         </div>
       </div>

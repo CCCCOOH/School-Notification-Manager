@@ -12,11 +12,24 @@ module.exports.listClass = async (req, res) => {
     res.status(500).send('查询所有班级失败')
   }
 }
+
 // 创建班级
 module.exports.createClass = async (req, res) => {
   try {
-    const new_class = await ClassModel(req.body)
-    await new_class.save();
+    // 创建班级示例
+    const new_class = new ClassModel(req.body);
+    await new_class.save()
+
+    const { createdBy } = req.body;
+    // 创建者模型
+    const user_doc = await UserModel.findById(createdBy)
+    // 在创建者的班级列表中加入对应的班级
+    user_doc.classes.push({
+      _id: new_class._id
+    })
+    await user_doc.save()
+
+
     res.send({
       code: 200,
       msg: '创建成功',
@@ -30,6 +43,7 @@ module.exports.createClass = async (req, res) => {
     })
   }
 }
+
 // 移除班级
 module.exports.removeClass = async (req, res) => {
   try {
@@ -48,7 +62,7 @@ module.exports.removeClass = async (req, res) => {
     if (row) {
       const user_doc = await UserModel.findById(user_id);
       const user_classes = user_doc.classes;
-      const remove_idx = user_classes.findIndex(item => item.classId = class_id);
+      const remove_idx = user_classes.findIndex(item => item._id = class_id);
       user_doc.classes.splice(remove_idx, 1);
       await user_doc.save();
       res.send({
@@ -116,11 +130,13 @@ module.exports.updateClass = async (req, res) => {
   }
 }
 
+// 清空班级成员
 module.exports.clearClass = async (req, res) => {
   await ClassModel.deleteMany()
   res.send("清空班级成功")
 }
 
+// 添加通知
 module.exports.addNotify = async (req, res) => {
   try {
     const {
@@ -170,6 +186,7 @@ module.exports.addNotify = async (req, res) => {
   }
 }
 
+// 修改通知
 module.exports.modifyNotify = async (req, res) => {
   try {
     const {
@@ -226,22 +243,27 @@ module.exports.modifyNotify = async (req, res) => {
   }
 }
 
+// 查询用户所有班级>所有班级下的通知
 module.exports.listNotifyUser = async (req, res) => {
   try {
     const {
       user_id
     } = req.query;
-    let user_info = await UserModel.findById(user_id);
-    const user_classe_list = user_info.classes.map(item => item.classId);
-    const classes = await ClassModel.find({
+    let user_doc = await UserModel.findById(user_id);
+    const classIdList = user_doc.classes.map(item => item._id)
+    let classList = await ClassModel.find({
       _id: {
-        $in: user_classe_list
+        $in: classIdList
       }
     })
+    let final_notify_list = [];
+    for (let cla of classList) {
+      final_notify_list = [...final_notify_list, ...cla.notifies]
+    }
     res.send({
       code: 200,
       msg: '查询成功',
-      rows: classes
+      rows: final_notify_list
     })
   } catch (error) {
     console.error(error);
@@ -252,6 +274,7 @@ module.exports.listNotifyUser = async (req, res) => {
   }
 }
 
+// 查询班级下的通知
 module.exports.listClassNotify = async (req, res) => {
   try {
     const {
@@ -274,6 +297,7 @@ module.exports.listClassNotify = async (req, res) => {
   }
 }
 
+// 移除通知
 module.exports.removeNotify = async (req, res) => {
   try {
     const {
@@ -302,6 +326,7 @@ module.exports.removeNotify = async (req, res) => {
   }
 }
 
+// 查询通知详情
 module.exports.notifyDetail = async (req, res) => {
   try {
     const {
@@ -327,16 +352,24 @@ module.exports.notifyDetail = async (req, res) => {
   }
 }
 
-module.exports.getClassMembers = async (req, res) => {
+// 获取班级成员
+module.exports.classMembersGet = async (req, res) => {
   try {
     const { class_id } = req.query;
-    const class_doc = await ClassModel.findById(class_id);
+    const class_doc = await ClassModel.findOne({
+      _id: class_id
+    });
+
     const memberIdList = class_doc.members.map(item => item._id);
+
     const users = await UserModel.find({
       _id: {
         $in: memberIdList
       }
+    }, {
+      username: true
     })
+
     res.send({
       code: 200,
       msg: '获取成功',
@@ -347,6 +380,69 @@ module.exports.getClassMembers = async (req, res) => {
     res.send({
       code: 500,
       msg: '获取成员失败'
+    })
+  }
+}
+
+// 添加班级成员
+/**
+ * ⚠️：多对多关系，需要在班级模型下添加用户信息，在用户模型下添加班级信息
+ */
+module.exports.classMemberAdd = async (req, res) => {
+  try {
+    const { class_id, user_id } = req.body;
+    if (!class_id || !user_id) {
+      res.send({
+        code: 500,
+        msg: '字段不能为空'
+      })
+    }
+
+    const class_doc = await ClassModel.findById(class_id);
+
+    const user_doc = await UserModel.findById(user_id);
+    
+    const hasUser = class_doc.members.find(item => item._id == user_id);
+
+    if (!class_doc || !user_doc) {
+      return res.send({
+        code: 500,
+        msg: '找不到班级或用户'
+      })
+    }
+
+    if (hasUser) {
+      return res.send({
+        code: 500,
+        msg: '班级成员已存在'
+      })
+    }
+
+    class_doc.members.push({
+      _id: user_id
+    })
+    class_doc.save()
+
+    user_doc.classes.push({
+      _id: class_id
+    })
+    user_doc.save()
+
+    
+
+    res.send({
+      code: 200,
+      msg: '添加成功',
+      rows: [
+        user_doc,
+        class_doc
+      ]
+    })
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 500,
+      msg: '添加失败'
     })
   }
 }

@@ -1,12 +1,12 @@
 <template>
   <ul class="p-3">
     <label for="title" class="block text-sm my-2">班级名</label>
-    <input id="title" class="pl-4 transition outline-2 outline-gray-400 text-gray-600 rounded-2xl p-1 focus:outline-indigo-500" placeholder="输入班级名..."
+    <input id="title" class="pl-4 transition outline-2 outline-gray-400 text-gray-600 rounded p-1 focus:outline-indigo-500" placeholder="输入班级名..."
       v-model="classDetail.className">
     <hr class="mt-3 text-gray-300">
 
     <label for="description" class="block text-sm my-2">描述</label>
-    <input id="description" class="transition w-full outline-2 outline-gray-400 text-gray-600 rounded-2xl p-1 focus:outline-indigo-500 pl-4" placeholder="输入班级描述..."
+    <input id="description" class="transition w-full outline-2 outline-gray-400 text-gray-600 rounded p-1 focus:outline-indigo-500 pl-4" placeholder="输入班级描述..."
       v-model="classDetail.description">
     <hr class="mt-3 text-gray-300">
 

@@ -65,6 +65,12 @@ const router = createRouter({
               name: 'manageClassMember',
               component: () => import('../views/MemberView.vue')
             },
+            {
+              path: 'joinClass',
+              name: 'joinClass',
+              component: () => import('../views/ClassViews/CLassJoin.vue')
+            },
+
           ]
         },
       ]
