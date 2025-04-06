@@ -3,5 +3,6 @@ import { defineStore } from 'pinia'
 
 export const useClassDetailStore = defineStore('classDetail', () => {
   const classInfo = reactive({});
-  return { classInfo }
+  const manageClassInfo = reactive({});
+  return { classInfo, manageClassInfo }
 })

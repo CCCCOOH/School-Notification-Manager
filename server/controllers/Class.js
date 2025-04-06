@@ -17,10 +17,17 @@ module.exports.createClass = async (req, res) => {
   try {
     const new_class = await ClassModel(req.body)
     await new_class.save();
-    res.send(new_class);
+    res.send({
+      code: 200,
+      msg: '创建成功',
+      rows: new_class
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send('添加班级失败')
+    res.send({
+      code: 500,
+      msg: "创建失败"
+    })
   }
 }
 // 移除班级
@@ -30,7 +37,6 @@ module.exports.removeClass = async (req, res) => {
       user_id,
       class_id
     } = req.query;
-
     const row = await ClassModel.findOneAndDelete({
       $and: [{
         createdBy: user_id
@@ -40,12 +46,16 @@ module.exports.removeClass = async (req, res) => {
     })
 
     if (row) {
+      const user_doc = await UserModel.findById(user_id);
+      const user_classes = user_doc.classes;
+      const remove_idx = user_classes.findIndex(item => item.classId = class_id);
+      user_doc.classes.splice(remove_idx, 1);
+      await user_doc.save();
       res.send({
         code: 200,
         msg: '删除成功',
         row
       })
-      return;
     } else {
       res.send({
         code: 500,
@@ -141,15 +151,22 @@ module.exports.addNotify = async (req, res) => {
       })
       await row.save();
       res.send({
+        code: 200,
         msg: "添加成功",
         row
       })
     } else {
-      res.status(500).send("添加失败")
+      res.send({
+        code: 500,
+        msg: '添加失败'
+      })
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("添加失败")
+    res.send({
+      code: 500,
+      msg: '添加失败'
+    })
   }
 }
 
@@ -199,17 +216,78 @@ module.exports.modifyNotify = async (req, res) => {
   }
 }
 
-module.exports.listNotify = async (req, res) => {
-  const { user_id } = req.query;
-  let user_info = await UserModel.findById(user_id);
-  let user_classes = user_info.classes;
-  let select_list = [];
-  
-  let row = await ClassModel.find({
-    $or: [
+module.exports.listNotifyUser = async (req, res) => {
+  try {
+    const {
+      user_id
+    } = req.query;
+    let user_info = await UserModel.findById(user_id);
+    const user_classe_list = user_info.classes.map(item => item.classId);
+    const classes = await ClassModel.find({
+      _id: {
+        $in: user_classe_list
+      }
+    })
+    res.send({
+      code: 200,
+      msg: '查询成功',
+      rows: classes
+    })
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 500,
+      msg: '查询失败'
+    })
+  }
+}
 
-    ]
-  })
-  res.send(user_classes)
-  return;
+module.exports.listClassNotify = async (req, res) => {
+  try {
+    const {
+      class_id
+    } = req.query;
+    const row = await ClassModel.findById(class_id, {
+      notifies: true
+    });
+    res.send({
+      code: 200,
+      msg: '查询成功',
+      row
+    })
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 500,
+      msg: '查询失败'
+    })
+  }
+}
+
+module.exports.removeNotify = async (req, res) => {
+  try {
+    const {
+      class_id,
+      notify_id
+    } = req.query;
+
+    console.log(class_id, notify_id);
+
+    const class_doc = await ClassModel.findById(class_id);
+    const rmIdx = class_doc.notifies.findIndex(item => item._id == notify_id);
+    class_doc.notifies.splice(rmIdx, 1);
+    await class_doc.save();
+    res.send({
+      code: 200,
+      msg: '删除成功',
+      class_doc
+    })
+  } catch (error) {
+    console.error(error);
+    
+    res.send({
+      code: 500,
+      msg: '删除失败'
+    })
+  }
 }

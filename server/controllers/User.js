@@ -43,13 +43,15 @@ module.exports.login = async (req, res) => {
       password
     } = req.body;
     const user = await UserModel.findOne({
-      $and: [
-        {username}, {password}
-      ]
+      $and: [{
+        username
+      }, {
+        password
+      }]
     }, {
       password: false
     })
-    
+
     if (user) {
       res.send({
         code: 200,
@@ -104,15 +106,36 @@ module.exports.updateUser = async (req, res) => {
 }
 
 module.exports.listClasses = async (req, res) => {
-  const { user_id } = req.params;
-  const rows = await UserModel.findById(user_id)
-  const class_ids = rows.classes.map(item => item.classId)
-  const classes = await ClassModel.find({
-    _id: {
-      $in: class_ids
+  try {
+    const {
+      user_id
+    } = req.params;
+    const rows = await UserModel.findById(user_id);
+    if (!rows) {
+      return res.send({
+        code: 200,
+        msg: '查询为空',
+        rows: []
+      })
     }
-  }, {
-    __v: false
-  })
-  res.send(classes)
+    const class_ids = rows.classes.map(item => item.classId)
+    const classes = await ClassModel.find({
+      _id: {
+        $in: class_ids
+      }
+    }, {
+      __v: false
+    })
+    res.send({
+      code: 200,
+      msg: '查询成功',
+      rows: classes
+    })
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 200,
+      msg: '查询失败'
+    })
+  }
 }

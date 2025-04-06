@@ -31,13 +31,30 @@ const router = createRouter({
             {
               path: 'create',
               name: 'createClass',
-              component: () => import('../views/ClassViews/Create.vue')
+              component: () => import('../views/ClassViews/ClassCreate.vue')
             },
             {
               path: 'detail',
               name: 'classDetail',
               component: () => import('../views/ClassViews/ClassDetail.vue')
             },
+            {
+              path: 'manageClassNotify',
+              name: 'manageClassNotify',
+              component: () => import('../views/NotifyViews/ManageClassNotify.vue'),
+              children: [
+                {
+                  path: 'manageNotifyList',
+                  name: 'manageNotifyList',
+                  component: () => import('../views/NotifyViews/ManageNotifyList.vue')
+                },
+                {
+                  path: 'addNotify',
+                  name: 'addNotify',
+                  component: () => import('../views/NotifyViews/AddNotify.vue')
+                },
+              ]
+            }
           ]
         },
       ]

@@ -128,7 +128,7 @@ const onLoginButton = async () => {
 
       message('登陆成功')
       setTimeout(() => {
-        router.push({ name: 'user' })
+        router.push({ name: 'classList' })
       }, 1000);
     } catch (error) {
       console.error(error);

@@ -54,7 +54,7 @@ const onCreateClassButton = async () => {
       description: createForm.description,
       createdBy: user_id
     })
-    if (res.status == 200) {
+    if (res.data.code == 200) {
       confirm('创建成功', '', true, () => {
         router.push({name: 'classList'})
         close()

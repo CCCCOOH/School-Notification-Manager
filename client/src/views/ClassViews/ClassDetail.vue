@@ -1,7 +1,8 @@
 <template>
   <ul class="p-3">
     <label for="title" class="block text-sm my-2">班级名</label>
-    <input id="title" class="pl-4 transition text-gray-600 rounded-2xl p-1 focus:outline" v-model="classDetail.className">
+    <input id="title" class="pl-4 transition text-gray-600 rounded-2xl p-1 focus:outline"
+      v-model="classDetail.className">
     <hr class="mt-3 text-gray-300">
 
     <label for="description" class="block text-sm my-2">描述</label>
@@ -47,7 +48,7 @@ async function confirmDeleteClass() {
   const res = await axios.delete(`class/remove?user_id=${user_id}&class_id=${class_id}`)
   if (res.data.code == 200) {
     confirm('提示', '删除成功', true, () => {
-      router.push({name: 'classList'})
+      router.push({ name: 'classList' })
       close();
     })
     return true;
@@ -61,7 +62,7 @@ async function confirmDeleteClass() {
 const updateClassDetail = async () => {
   try {
     if (classDetail.value.className.trim() == '') {
-      confirm('请填写标题', '', true, () => {close()})
+      confirm('请填写标题', '', true, () => { close() })
       return;
     }
     const { _id: class_id } = classDetail.value;

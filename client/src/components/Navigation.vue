@@ -19,7 +19,7 @@ let menu = ref([
   {
     id: 'class',
     name: '班级',
-    url: '/user/class',
+    url: '/user/class/list',
     icon: 'fas fa-window-restore'
   },
 ])

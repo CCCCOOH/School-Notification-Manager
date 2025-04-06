@@ -7,7 +7,11 @@
       <router-link active-class="text-sky-700" :to="{name: 'createClass'}" class="p-1 rounded transition cursor-pointer hover:-translate-y-[1px] hover:text-sky-700">创建新的班级</router-link>
     </ul>
 
-      <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <transition enter-from-class="opacity-0" enter-active-class="transition">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
