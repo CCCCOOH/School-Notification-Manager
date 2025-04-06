@@ -23,5 +23,3 @@
 import TopContainer from '@/components/TopContainer.vue';
 import Navigation from '@/components/Navigation.vue';
 </script>
-
-<style lang="scss" scoped></style>

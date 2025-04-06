@@ -53,8 +53,18 @@ const router = createRouter({
                   name: 'addNotify',
                   component: () => import('../views/NotifyViews/AddNotify.vue')
                 },
+                {
+                  path: 'editNotify',
+                  name: 'editNotify',
+                  component: () => import('../views/NotifyViews/UpdateNotify.vue')
+                },
               ]
-            }
+            },
+            {
+              path: 'manageClassMember',
+              name: 'manageClassMember',
+              component: () => import('../views/MemberView.vue')
+            },
           ]
         },
       ]

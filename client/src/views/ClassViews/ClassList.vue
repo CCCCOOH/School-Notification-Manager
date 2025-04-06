@@ -10,6 +10,8 @@
               class="flex-1 w-1/2 hover:scale-110 hover:shadow-2xl bg-sky-500 text-white rounded-bl cursor-pointer hover:brightness-110 active:scale-105 transition">编辑班级</button>
             <button @click="toManageNotify(cla)"
               class="flex-1 w-1/2 hover:scale-110 hover:shadow-2xl bg-green-500 text-white rounded-br cursor-pointer hover:brightness-110 active:scale-105 transition">管理通知</button>
+            <button @click="toManageMember(cla)"
+              class="flex-1 w-1/2 hover:scale-110 hover:shadow-2xl bg-indigo-500 text-white rounded-br cursor-pointer hover:brightness-110 active:scale-105 transition">班级成员</button>
           </div>
         </li>
       </TransitionGroup>
@@ -46,5 +48,12 @@ function toManageNotify(cla) {
     name: 'manageNotifyList',
   })
   classDetailStore.manageClassInfo = cla;
+}
+
+function toManageMember(cla) {
+  router.push({
+    name: 'manageClassMember'
+  })
+  classDetailStore.classMemberInfo = cla;
 }
 </script>

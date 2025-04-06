@@ -194,7 +194,10 @@ module.exports.modifyNotify = async (req, res) => {
     if (row) {
       let notify = row.notifies.find(notify => notify._id.equals(notify_id));
       if (!notify) {
-        res.status(500).send("修改失败");
+        res.send({
+          code: 500,
+          msg: "修改失败"
+        });
         return;
       }
       notify.title = title;
@@ -204,15 +207,22 @@ module.exports.modifyNotify = async (req, res) => {
       notify.categories = categories
       await row.save();
       res.send({
+        code: 200,
         msg: "修改成功",
         notify
       })
     } else {
-      res.status(500).send("修改失败")
+      res.send({
+        code: 500,
+        msg: "修改失败"
+      });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("修改失败")
+    res.send({
+      code: 500,
+      msg: "修改失败"
+    });
   }
 }
 
@@ -288,6 +298,55 @@ module.exports.removeNotify = async (req, res) => {
     res.send({
       code: 500,
       msg: '删除失败'
+    })
+  }
+}
+
+module.exports.notifyDetail = async (req, res) => {
+  try {
+    const {
+      class_id,
+      notify_id
+    } = req.query;
+
+    const class_doc = await ClassModel.findById(class_id);
+    const notify = class_doc.notifies.find(item => item._id == notify_id);
+
+    res.send({
+      code: 200,
+      msg: '查询成功',
+      notify
+    })
+  } catch (error) {
+    console.error(error);
+    
+    res.send({
+      code: 500,
+      msg: '查询失败'
+    })
+  }
+}
+
+module.exports.getClassMembers = async (req, res) => {
+  try {
+    const { class_id } = req.query;
+    const class_doc = await ClassModel.findById(class_id);
+    const memberIdList = class_doc.members.map(item => item._id);
+    const users = await UserModel.find({
+      _id: {
+        $in: memberIdList
+      }
+    })
+    res.send({
+      code: 200,
+      msg: '获取成功',
+      rows: users
+    })
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 500,
+      msg: '获取成员失败'
     })
   }
 }

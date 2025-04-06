@@ -11,7 +11,6 @@ const ClassSchema = new mongoose.Schema({
   className: {
     type: String,
     required: true,
-    unique: true
   },
   description: {
     type: String
