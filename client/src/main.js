@@ -11,7 +11,7 @@ import router from './router'
 
 
 const axios_ = axios.create({
-  baseURL: 'http://154.64.253.234:8080/api'
+  baseURL: 'http://localhost:8080/api'
 })
 
 
