@@ -3,8 +3,8 @@
     <h1 class="text-gray-700">账号管理</h1>
     <hr class="text-gray-300 mb-4">
 
-    <div class="flex items-center gap-4 flex-wrap h-45">
-      <ul class="flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm h-full justify-between">
+    <div class="flex items-center gap-4 flex-wrap h-45 max-md:flex-col max-md:flex-nowrap">
+      <ul class="flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm h-full justify-between max-md:w-full">
         <li class="flex items-center gap-2 justify-between">
           <label for="username" class="text-sky-700">用户名:</label>
           <input placeholder="请输入用户名..." type="text" id="username" autocomplete="false"
@@ -28,7 +28,7 @@
         </li>
       </ul>
 
-      <ul class="h-full flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm justify-between">
+      <ul class="h-full flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm justify-between max-md:w-full">
         <li class="flex items-center gap-2 justify-between">
           <label for="originpassword" class="text-sky-700">原先密码:</label>
           <input placeholder="请输入密码..." type="password" id="originpassword" v-model="originpassword" autocomplete="false"

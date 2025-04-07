@@ -3,7 +3,7 @@
     <ul class="p-2 flex gap-2 flex-wrap">
       <TransitionGroup enter-from-class="opacity-0 scale-80" enter-to-class="opacity-100 scale-100">
         <li v-for="cla in classesList" :key="cla._id"
-          class="relative transition w-70 h-20 rounded hover:shadow-md border border-gray-200 hover:shadow-gray-300 flex flex-col pt-4 items-center hover:-translate-y-1">
+          class="relative transition w-70 h-20 rounded hover:shadow-sm border border-gray-200 hover:shadow-gray-300 flex flex-col pt-4 items-center">
           <h1 class="font-bold">{{ cla.className }}</h1>
           <div v-if="cla.createdBy == userStore.userDatas._id" class="flex w-full absolute bottom-0">
             <button @click="toTheClass(cla)"

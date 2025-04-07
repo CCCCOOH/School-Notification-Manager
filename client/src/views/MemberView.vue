@@ -5,14 +5,12 @@
       <div class="inline-flex gap-2 items-center">
         <p class="font-bold bg-gray-700 inline px-2 rounded-2xl text-white">{{ classInfo._id }}
         </p>
-        <i title="复制ID"
-          class="fas fa-clipboard cursor-pointer hover:bg-gray-300 p-2 rounded-full size-8 text-center active:brightness-110"
-          @click="copyId"></i>
+        <CopyButton :str="classInfo._id"/>
       </div>
     </header>
     <h1 class="p-2 text-gray-500">班级成员：</h1>
     <ul class="w-full h-fit flex gap-2 flex-wrap p-2">
-      <li v-for="item in members" class="rounded-full bg-sky-500 size-10 flex justify-center items-center text-white"><span>{{item.username.slice(0, 2)}}</span></li>
+      <li v-for="item in members" :key="item" class="rounded-full bg-sky-500 size-10 flex justify-center items-center text-white"><span>{{item.username.slice(0, 2)}}</span></li>
     </ul>
   </div>
 </template>
@@ -20,6 +18,7 @@
 <script setup>
 import { useClassDetailStore } from '@/stores/classDetail';
 import { inject, onMounted, ref } from 'vue';
+import CopyButton from '@/components/CopyButton.vue';
 
 const classDetailStore = useClassDetailStore();
 const axios = inject('axios')
