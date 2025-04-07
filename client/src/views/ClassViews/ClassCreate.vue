@@ -47,20 +47,25 @@ const onCreateClassButton = async () => {
       })
       return;
     }
-    const userDatas = useUserStore().userDatas;
+    const userDatas = userStore.userDatas;
+    
     const { _id: user_id } = userDatas;
+    console.log('user_id:',user_id);
+    
+    
     const res = await axios.post('class/create', {
       className: createForm.className,
       description: createForm.description,
       createdBy: user_id
     })
+
     if (res.data.code == 200) {
-      confirm('创建成功', '', true, () => {
+      confirm(res.data.msg, '', true, () => {
         router.push({name: 'classList'})
         close()
       })
     } else {
-      confirm('创建失败')
+      confirm(res.data.msg)
     }
   } catch (error) {
     console.error(error);

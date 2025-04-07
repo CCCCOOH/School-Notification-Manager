@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex px-7 py-15">
     <!-- 左侧容器 -->
-    <div class="flex-2 py-10 px-5 pr-20">
+    <div class="flex-2 py-10 px-5 pr-20 max-md:hidden">
         <!-- 卡片 -->
         <div class="bg-sky-600 flex-1 w-full h-full rounded-xl bg-linear-to-br from-sky-600 to-sky-200 pr-10">
           <i class="fas fa-quote-left text-7xl text-white w-full h-fit ml-10 mt-10 overflow-hidden"></i>

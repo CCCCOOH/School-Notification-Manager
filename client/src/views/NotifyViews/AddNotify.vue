@@ -8,7 +8,7 @@
     <div>
       <h1 class="inline text-gray-700">内容：</h1>
       <textarea type="text" v-model="addForm.content"
-        class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 min-h-18 w-full h-fit transition"
+        class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 min-h-30 w-full transition"
         placeholder="请输入通知内容.." />
       <select name="level" id="level" v-model="addForm.level" class="outline-none">
         <option value="1">优先通知</option>
@@ -47,6 +47,7 @@ const categoriesInput = ref('')
 
 async function onAddButton() {
   const classInfo = classDetailStore.manageClassInfo;
+  
   const class_id = classInfo._id;
   const user_id = userStore.userDatas._id;
   if (categoriesInput.value !== '') {
@@ -61,7 +62,6 @@ async function onAddButton() {
     class_id,
     user_id
   })
-  console.log(addForm.categories);
   
   if (res.data.code == 200) {
     confirm('提示', res.data.msg, true, () => {

@@ -23,7 +23,14 @@ module.exports.createClass = async (req, res) => {
     const { createdBy } = req.body;
     // 创建者模型
     const user_doc = await UserModel.findById(createdBy)
+    if (!user_doc) {
+      return res.send({
+        code: 500,
+        msg: '不存在用户'
+      })
+    }
     // 在创建者的班级列表中加入对应的班级
+    
     user_doc.classes.push({
       _id: new_class._id
     })

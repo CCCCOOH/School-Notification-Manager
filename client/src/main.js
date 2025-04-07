@@ -1,5 +1,8 @@
 import { createApp, provide } from 'vue'
 import { createPinia } from 'pinia'
+
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+
 import axios from 'axios'
 import './assets/style.css'
 
@@ -8,14 +11,16 @@ import router from './router'
 
 
 const axios_ = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: 'http://154.64.253.234:8080/api'
 })
 
 
 const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 app.provide('axios', axios_)
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 
 app.mount('#app')

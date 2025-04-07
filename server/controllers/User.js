@@ -25,7 +25,7 @@ module.exports.register = async (req, res) => {
     res.send({
       code: 200,
       msg: '注册成功',
-      data: user
+      row: user
     })
   } catch (err) {
     console.error(err);
@@ -40,16 +40,11 @@ module.exports.login = async (req, res) => {
   try {
     const {
       username,
-      password
+      password,
     } = req.body;
     const user = await UserModel.findOne({
-      $and: [{
-        username
-      }, {
-        password
-      }]
-    }, {
-      password: false
+     email: username,
+     password
     })
 
     if (user) {
@@ -91,10 +86,28 @@ module.exports.deleteAll = async (req, res) => {
 
 module.exports.updateUser = async (req, res) => {
   try {
-    await UserModel.findOneAndUpdate(req.body);
+    const {user_id, username, fullname, password} = req.body;
+    const user_doc = await UserModel.findOne({
+      _id: user_id,
+    });
+
+    if (!user_doc) {
+      return res.send({
+        code: 500,
+        msg: '未找到用户'
+      })
+    }
+
+    user_doc.username = username;
+    user_doc.fullname = fullname;
+    user_doc.password = password;
+
+    await user_doc.save();
+
     res.send({
       code: 200,
-      msg: '更新成功'
+      msg: '更新成功',
+      row: user_doc
     })
   } catch (error) {
     console.error(error);

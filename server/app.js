@@ -13,6 +13,6 @@ app.get('/', (req, res) => {
 app.use('/api/user', require('./routes/User'))
 app.use('/api/class', require('./routes/Class'))
 
-app.listen(3000, () => {
-    console.log("http://localhost:3000");
+app.listen(8080, () => {
+    console.log("http://localhost:8080");
 })

@@ -20,11 +20,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: () => this.username
   },
-  classes: [{
-    classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
-    isManager: { type: Boolean, default: false },
-    joinedAt: { type: Date, default: Date.now() }
-  }],
+  classes: {
+    type: [{
+      classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
+      isManager: { type: Boolean, default: false },
+      joinedAt: { type: Date, default: Date.now() }
+    }],
+    default: []
+  },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date, default: Date.now() }
 })

@@ -2,7 +2,7 @@
   <div>
     <ul class="transition flex gap-5 p-3 overflow-auto flex-wrap">
       <!-- 单个通知 -->
-      <NotifyCard v-for="(item) in data" :data="item" :key="item" class="w-100 h-60"/>
+      <NotifyCard v-for="(item) in data" :data="item" :key="item" class="w-100 h-fit"/>
     </ul>
   </div>
 </template>

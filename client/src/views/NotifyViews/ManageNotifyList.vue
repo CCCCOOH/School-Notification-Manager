@@ -17,7 +17,7 @@
           </router-link>
           <div :class="levelClass[item.level]">{{ levelDict[item.level] }}</div>
           <ul class="flex gap-2">
-            <li v-for="category in item.categories" :class="category ? 'border rounded text-gray-800 px-1' : ''">{{
+            <li v-for="category in item.categories" :key="category" :class="category ? 'border rounded text-gray-800 px-1' : ''">{{
               category }}</li>
           </ul>
         </div>
@@ -28,9 +28,10 @@
 
 <script setup>
 import { useClassDetailStore } from '@/stores/classDetail';
+import { nextTick } from 'vue';
 import { inject, onMounted, reactive, ref } from 'vue';
 
-const classDetailStore = useClassDetailStore();
+const classDetailStore = useClassDetailStore()
 const class_id = ref('')
 const notifies = ref([])
 
@@ -44,14 +45,17 @@ const levelDict = reactive({
   3: '一般通知',
 })
 
-async function getNotifies() {
+async function getNotifies() {;
   class_id.value = classDetailStore.manageClassInfo._id;
+  
   const res = await axios.get(`class/notify_class?class_id=${class_id.value}`)
   notifies.value = res.data.row.notifies;
 }
 
 onMounted(async () => {
-  getNotifies()
+  await nextTick()
+  
+  getNotifies();
 })
 
 const levelClass = reactive({

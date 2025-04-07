@@ -22,6 +22,7 @@
 <script setup>
 import { useClassDetailStore } from '@/stores/classDetail';
 import { useUserStore } from '@/stores/user';
+import { nextTick } from 'vue';
 import { inject, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const userStore = useUserStore();
@@ -31,10 +32,13 @@ const classesList = ref([])
 const classDetailStore = useClassDetailStore();
 
 onMounted(async () => {
-  const user_id = userStore._id ? userStore._id : localStorage._id;
-  const res = await axios.get(`user/list_classes/${user_id}`);
-  classesList.value = res.data.rows;
+  console.log(userStore.userDatas);
   
+  const user_id = userStore.userDatas._id;
+  
+  const res = await axios.get(`user/list_classes/${user_id}`);;
+  
+  classesList.value = res.data.rows;
 })
 
 const toTheClass = (cla) => {
