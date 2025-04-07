@@ -7,7 +7,7 @@
         <!-- 通知时间 -->
         <span class="text-sky-700 hover:text-sky-600 transition">时间：{{ showTime }}</span>
         <!-- 通知内容 -->
-        <p @click="contentCollapse=!contentCollapse"  :class="{'line-clamp-3': contentCollapse}" class="text-gray-600 select-none">{{ content }}</p>
+        <p @click="contentCollapse=!contentCollapse"  :class="{'line-clamp-3': contentCollapse}" class="text-gray-600 select-none" v-html="content"></p>
         <!-- 标签列表 -->
         <div class="h-10 flex items-center gap-2 justify-start">
           <span v-if="levelClass[level]" :class="levelClass[level]">

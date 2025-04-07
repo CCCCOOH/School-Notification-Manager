@@ -7,9 +7,10 @@
     </div>
     <div>
       <h1 class="inline text-gray-700">内容：</h1>
-      <textarea type="text" v-model="addForm.content"
+      <WangEditor v-model="addForm.content"/>
+      <!-- <textarea type="text" v-model="addForm.content"
         class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 min-h-30 w-full transition"
-        placeholder="请输入通知内容.." />
+        placeholder="请输入通知内容.." /> -->
       <select name="level" id="level" v-model="addForm.level" class="outline-none">
         <option value="1">优先通知</option>
         <option value="2">重要通知</option>
@@ -23,6 +24,7 @@
 </template>
 
 <script setup>
+import WangEditor from '@/components/WangEditor.vue';
 import { useClassDetailStore } from '@/stores/classDetail';
 import { useUserStore } from '@/stores/user';
 import { inject, reactive, ref } from 'vue';

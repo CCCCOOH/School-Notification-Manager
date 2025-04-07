@@ -7,7 +7,7 @@
         <!-- 通知标题 -->
         <h1 class="font-bold text-2xl">{{ item.title }}</h1>
         <!-- 通知内容 -->
-        <p class="cursor-pointer select-none" :class="{'line-clamp-3': item.collapsed}" @click="item.collapsed=!item.collapsed">{{ item.content }}</p>
+        <p v-html="item.content" class="cursor-pointer select-none" :class="{'line-clamp-3': item.collapsed}" @click="item.collapsed=!item.collapsed"></p>
         <div class="flex gap-2 items-center">
           <i class="transition fas fa-trash-alt hover:text-red-500 hover:bg-gray-300 rounded-full p-2 cursor-pointer"
             @click="onRemoveNotifyButton(item)"></i>

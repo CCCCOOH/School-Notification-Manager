@@ -6,7 +6,8 @@
     </li>
     <li>
       <label for="content" class="text-gray-500 block">内容：</label>
-      <textarea placeholder="请输入更新内容..." id="content" type="text" v-model="updateForm.content" class="w-full rounded outline-2 outline-gray-300 p-2 min-h-20 transition focus:outline-indigo-500" />
+      <WangEditor v-model="updateForm.content" />
+      <!-- <textarea placeholder="请输入更新内容..." id="content" type="text" v-model="updateForm.content" class="w-full rounded outline-2 outline-gray-300 p-2 min-h-20 transition focus:outline-indigo-500" /> -->
     </li>
     <li>
       <select name="level" id="level" v-model="updateForm.level" class="outline-gray-300">
@@ -26,7 +27,9 @@
 </template>
 
 <script setup>
+import WangEditor from '@/components/WangEditor.vue';
 import { useUserStore } from '@/stores/user';
+import { watch } from 'vue';
 import { inject, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
