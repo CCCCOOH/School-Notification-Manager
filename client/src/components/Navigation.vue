@@ -1,6 +1,6 @@
 <template>
-  <div class="p-3 flex flex-col gap-1 transition max-md:flex-row">
-    <router-link @click="activeTag = item.id" v-for="item in menu" :key="item.id" :to="item.url" class="transition flex items-center gap-2 active:bg-gray-200 hover:bg-gray-100 rounded cursor-default p-2 font-bold" active-class="bg-gray-300/50">
+  <div class="p-3 flex items-center flex-col gap-5 transition max-md:flex-row bg-gray-100/50 h-full">
+    <router-link @click="activeTag = item.id" v-for="item in menu" :key="item.id" :to="item.url" class="transition flex items-center gap-2 active:bg-gray-200 hover:bg-gray-100 rounded cursor-default p-2 size-8 font-bold" active-class="bg-gray-300/50">
       <i :class="item.icon"></i>{{item.name}}
     </router-link>
   </div>
@@ -12,19 +12,19 @@ import { onMounted, ref } from 'vue';
 let menu = ref([
   {
     id: 'notify',
-    name: '通知',
+    name: '',
     url: '/user/notify',
     icon: 'fa-solid fa-circle-exclamation'
   },
   {
     id: 'class',
-    name: '班级',
+    name: '',
     url: '/user/class/list',
     icon: 'fas fa-window-restore'
   },
   {
     id: 'detail',
-    name: '个人',
+    name: '',
     url: '/user/userinfo',
     icon: 'fas fa-user'
   },

@@ -11,14 +11,22 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
 
 // 内容 HTML
 const mode = ref('default')
 
-const toolbarConfig = {}
+const toolbarConfig = {
+
+}
 const editorConfig = { placeholder: '请输入内容...' }
+toolbarConfig.excludeKeys = [
+  'uploadVideo',
+  'insertVideo',
+  "editVideoSize"
+]
 
 const valueHtml = defineModel()
 

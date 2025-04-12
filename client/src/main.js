@@ -10,8 +10,11 @@ import App from './App.vue'
 import router from './router'
 
 
+const server = '154.64.253.234'
+const local = 'localhost'
+
 const axios_ = axios.create({
-  baseURL: 'http://localhost:8080/api'
+  baseURL: `http://${local}:8080/api`
 })
 
 

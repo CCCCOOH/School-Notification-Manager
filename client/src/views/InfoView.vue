@@ -17,8 +17,7 @@
         </li>
         <li class="flex items-center gap-2 justify-between">
           <label for="fullname" class="text-sky-700">邮箱:</label>
-          <input disabled 
-            class="flex-1 transition outline-none border-b border-gray-300" v-model="userForm.email">
+          <input disabled class="flex-1 transition outline-none border-b border-gray-300" v-model="userForm.email">
         </li>
         <li class="w-full">
           <p :class="{ 'opacity-100': infoAlert.show }" class="transition opacity-0 text-red-500 text-[10px]">{{
@@ -31,12 +30,12 @@
       <ul class="h-full flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm justify-between max-md:w-full">
         <li class="flex items-center gap-2 justify-between">
           <label for="originpassword" class="text-sky-700">原先密码:</label>
-          <input placeholder="请输入密码..." type="password" id="originpassword" v-model="originpassword" autocomplete="false"
-            class="flex-1 transition outline-none border-b focus:border-sky-500">
+          <input placeholder="请输入密码..." type="password" id="originpassword" v-model="originpassword"
+            autocomplete="false" class="flex-1 transition outline-none border-b focus:border-sky-500">
         </li>
 
         <li class="flex items-center gap-2 justify-between">
-          <label for="password" class="text-sky-700">修改密码:</label> 
+          <label for="password" class="text-sky-700">修改密码:</label>
           <input placeholder="请输入密码..." type="password" id="password" v-model="password_1" autocomplete="false"
             class="flex-1 transition outline-none border-b focus:border-sky-500">
         </li>
@@ -60,6 +59,7 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
 import { reactive } from 'vue';
+import { nextTick } from 'vue';
 import { inject } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
@@ -95,7 +95,7 @@ const onInfoSaveButton = async () => {
   } else if (userForm.value.fullname == '') {
     showInfoAlert('全名不能为空')
     return;
-  } else if (userForm.value.fullname.length > 10) {
+  } else if (userForm.value.fullname?.length > 10) {
     showInfoAlert('全名过长')
     return;
   } else {
@@ -103,7 +103,10 @@ const onInfoSaveButton = async () => {
   }
   confirm('提示', '确认保存？', true, async () => {
     close()
+    console.log(userForm.value);
+
     const res = await axios.post(`user/update`, userForm.value)
+    await updateUserInfo();
     confirm('提示', res.data.msg, true, () => { close() })
   })
 }
@@ -133,9 +136,24 @@ const updatePassword = async () => {
   } else {
     passwordAlert.show = false
   }
-  userForm.password = password_1 == password_2 ? password_1 : ''
+  userForm.value.password = (password_1.value == password_2.value ? password_1.value : '')
   const res = await axios.post(`user/update`, userForm.value)
+  console.log(userForm.value);
+  
   confirm('提示', res.data.msg, true, () => { close() })
+}
+
+const updateUserInfo = async () => {
+  const res = await axios.post('user/login', {
+    username: userForm.value.email,
+    password: userForm.value.password
+  })
+
+  userStore.userDatas._id = res.data.row._id;
+  userStore.userDatas.username = res.data.row.username;
+  userStore.userDatas.fullname = res.data.row.fullname;
+  userStore.userDatas.password = res.data.row.password;
+  userStore.userDatas.email = res.data.row.email;
 }
 
 onMounted(() => {

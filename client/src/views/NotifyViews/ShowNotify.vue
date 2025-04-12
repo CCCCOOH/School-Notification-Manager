@@ -33,6 +33,7 @@ const data = ref([
 onMounted(async () => {
   const user_id = userStore.userDatas._id;
   const res = await axios.get(`class/notify_user?user_id=${user_id}`)
-  data.value = res.data.rows
+  data.value = res.data.rows;
+  console.log(data.value);
 })
 </script>

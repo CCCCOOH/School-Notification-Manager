@@ -10,6 +10,7 @@
       <!-- <textarea placeholder="请输入更新内容..." id="content" type="text" v-model="updateForm.content" class="w-full rounded outline-2 outline-gray-300 p-2 min-h-20 transition focus:outline-indigo-500" /> -->
     </li>
     <li>
+      <label for="level" class="text-gray-500 block">优先级：</label>
       <select name="level" id="level" v-model="updateForm.level" class="outline-gray-300">
         <option value="1">优先通知</option>
         <option value="2">重要通知</option>
