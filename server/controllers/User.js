@@ -20,6 +20,23 @@ module.exports.findUser = async (req, res) => {
 
 module.exports.register = async (req, res) => {
   try {
+    const {username, email} = req.body;
+    const hasUser = await UserModel.findOne({username})
+    if (hasUser) {
+      return res.send({
+        code: 500,
+        msg: '用户名已存在'
+      })
+    }
+
+    const hasEmail = await UserModel.findOne({email})
+    if (hasEmail) {
+      return res.send({
+        code: 500,
+        msg: '邮箱已存在'
+      })
+    }
+
     const user = new UserModel(req.body)
     await user.save()
     res.send({

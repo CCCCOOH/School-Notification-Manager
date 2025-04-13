@@ -50,6 +50,9 @@ const ClassSchema = new mongoose.Schema({
         type: String,
         required: true
       },
+      postUrl: {
+        type: String
+      },
       content: String,
       time: {
         type: Date,

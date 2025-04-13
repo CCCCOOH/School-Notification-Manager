@@ -1,9 +1,9 @@
 <template>
   <Teleport to="body">
-    <Transition enter-from-class="scale-80 opacity-0" enter-active-class="transition" leave-active-class="transition" leave-to-class="opacity-0 scale-0">
+    <Transition enter-from-class="scale-80 opacity-80" enter-active-class="transition ease-in-out" leave-active-class="transition ease-in-out" leave-to-class="opacity-0 scale-0">
       <div v-if="visible"
-        class="p-2 flex flex-col items-center rounded w-100 absolute outline shadow-lg bg-white left-1/2 top-1/3 -translate-1/2">
-        <div>
+        class="p-2 flex flex-col items-center rounded w-100 absolute outline-1 outline-gray-100 shadow-2xl bg-white left-1/2 top-1/3 -translate-1/2">
+        <div> 
           <div @click="visible = false">
             <div class="absolute left-2 size-3 bg-red-500 rounded-full cursor-pointer" title="关闭"></div>
             <div class="absolute left-6 size-3 bg-yellow-500 rounded-full cursor-pointer"></div>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 const options = reactive({
   title: '',
@@ -37,6 +37,10 @@ const options = reactive({
 })
 
 const visible = ref(false)
+
+watch(visible, (newVal) => {
+  document.querySelector('#app').classList.toggle('brightness-50')
+})
 
 async function close() {
   visible.value = false;

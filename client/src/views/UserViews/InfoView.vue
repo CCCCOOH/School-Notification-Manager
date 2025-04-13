@@ -4,15 +4,19 @@
     <hr class="text-gray-300 mb-4">
 
     <div class="flex items-center gap-4 flex-wrap h-45 max-md:flex-col max-md:flex-nowrap">
-      <ul class="flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm h-full justify-between max-md:w-full">
+      <ul class="flex flex-col gap-3 bg-white rounded p-2 shadow-sm h-full justify-between max-md:w-full">
         <li class="flex items-center gap-2 justify-between">
           <label for="username" class="text-sky-700">用户名:</label>
-          <input placeholder="请输入用户名..." type="text" id="username" autocomplete="false"
+          <p v-if="!isEdit" class="flex-1 transition outline-none border-b h-full border-gray-300">{{ userForm.username
+            }}</p>
+          <input v-else placeholder="请输入用户名..." type="text" id="username" autocomplete="false"
             class="flex-1 transition outline-none border-b focus:border-sky-500" v-model="userForm.username">
         </li>
         <li class="flex items-center gap-2 justify-between">
           <label for="fullname" class="text-sky-700">全名:</label>
-          <input placeholder="请输入用户名..." type="text" id="fullname" autocomplete="false"
+          <p v-if="!isEdit" class="flex-1 transition outline-none border-b h-full border-gray-300">{{ userForm.fullname
+            }}</p>
+          <input v-else placeholder="请输入用户名..." type="text" id="fullname" autocomplete="false"
             class="flex-1 transition outline-none border-b focus:border-sky-500" v-model="userForm.fullname">
         </li>
         <li class="flex items-center gap-2 justify-between">
@@ -22,12 +26,13 @@
         <li class="w-full">
           <p :class="{ 'opacity-100': infoAlert.show }" class="transition opacity-0 text-red-500 text-[10px]">{{
             infoAlert.content }}</p>
-          <button @click="onInfoSaveButton"
+          <button v-if="!isEdit" @click="isEdit = true" class="w-full bg-blue-400 text-white rounded px-2 hover:brightness-110 cursor-pointer active:brightness-105">编辑</button>
+          <button v-else @click="onInfoSaveButton"
             class="w-full bg-sky-400 text-white rounded px-2 hover:brightness-110 cursor-pointer active:brightness-105">保存</button>
         </li>
       </ul>
 
-      <ul class="h-full flex flex-col gap-3 bg-gray-100 rounded p-2 shadow-sm justify-between max-md:w-full">
+      <ul class="h-full flex flex-col gap-3 bg-white rounded p-2 shadow-sm justify-between max-md:w-full">
         <li class="flex items-center gap-2 justify-between">
           <label for="originpassword" class="text-sky-700">原先密码:</label>
           <input placeholder="请输入密码..." type="password" id="originpassword" v-model="originpassword"
@@ -48,7 +53,7 @@
           <p :class="{ 'opacity-100': passwordAlert.show }" class="transition opacity-0 text-red-500 text-[10px]">{{
             passwordAlert.content }}</p>
           <button @click="updatePassword"
-            class="w-full bg-sky-400 text-white rounded px-2 hover:brightness-110 cursor-pointer active:brightness-105">保存</button>
+            class="w-full bg-sky-400 text-white rounded px-2 hover:brightness-110 cursor-pointer active:brightness-105">修改密码 </button>
         </li>
       </ul>
     </div>
@@ -59,11 +64,10 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
 import { reactive } from 'vue';
-import { nextTick } from 'vue';
 import { inject } from 'vue';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
-
+const isEdit = ref(false)
 const userStore = useUserStore();
 const userForm = ref({
   user_id: '',
@@ -107,7 +111,10 @@ const onInfoSaveButton = async () => {
 
     const res = await axios.post(`user/update`, userForm.value)
     await updateUserInfo();
-    confirm('提示', res.data.msg, true, () => { close() })
+    confirm('提示', res.data.msg, true, () => {
+      close()
+      isEdit.value = false
+    })
   })
 }
 
@@ -139,7 +146,7 @@ const updatePassword = async () => {
   userForm.value.password = (password_1.value == password_2.value ? password_1.value : '')
   const res = await axios.post(`user/update`, userForm.value)
   console.log(userForm.value);
-  
+
   confirm('提示', res.data.msg, true, () => { close() })
 }
 

@@ -11,7 +11,7 @@ const router = createRouter({
     {
       path: '/user',
       name: 'user',
-      component: () => import('../views/UserView.vue'),
+      component: () => import('../views/PanelView.vue'),
       children: [
         {
           path: 'notify',
@@ -76,7 +76,7 @@ const router = createRouter({
         {
           path: 'userinfo',
           name: 'userinfo',
-          component: () => import('../views/InfoView.vue')
+          component: () => import('../views/UserViews/InfoView.vue')
         },
       ]
     },
