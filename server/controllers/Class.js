@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const ClassModel = require('../models/Class');
 const UserModel = require('../models/User');
+const path = require('path')
+const fs = require('fs')
 
 // 查询所有班级
 module.exports.listClass = async (req, res) => {
@@ -20,7 +22,9 @@ module.exports.createClass = async (req, res) => {
     const new_class = new ClassModel(req.body);
     await new_class.save()
 
-    const { createdBy } = req.body;
+    const {
+      createdBy
+    } = req.body;
     // 创建者模型
     const user_doc = await UserModel.findById(createdBy)
     if (!user_doc) {
@@ -30,7 +34,7 @@ module.exports.createClass = async (req, res) => {
       })
     }
     // 在创建者的班级列表中加入对应的班级
-    
+
     user_doc.classes.push({
       _id: new_class._id
     })
@@ -325,7 +329,7 @@ module.exports.removeNotify = async (req, res) => {
     })
   } catch (error) {
     console.error(error);
-    
+
     res.send({
       code: 500,
       msg: '删除失败'
@@ -351,7 +355,7 @@ module.exports.notifyDetail = async (req, res) => {
     })
   } catch (error) {
     console.error(error);
-    
+
     res.send({
       code: 500,
       msg: '查询失败'
@@ -362,7 +366,9 @@ module.exports.notifyDetail = async (req, res) => {
 // 获取班级成员
 module.exports.classMembersGet = async (req, res) => {
   try {
-    const { class_id } = req.query;
+    const {
+      class_id
+    } = req.query;
     const class_doc = await ClassModel.findOne({
       _id: class_id
     });
@@ -397,7 +403,10 @@ module.exports.classMembersGet = async (req, res) => {
  */
 module.exports.classMemberAdd = async (req, res) => {
   try {
-    const { class_id, user_id } = req.body;
+    const {
+      class_id,
+      user_id
+    } = req.body;
     if (!class_id || !user_id) {
       res.send({
         code: 500,
@@ -408,7 +417,7 @@ module.exports.classMemberAdd = async (req, res) => {
     const class_doc = await ClassModel.findById(class_id);
 
     const user_doc = await UserModel.findById(user_id);
-    
+
     const hasUser = class_doc.members.find(item => item._id == user_id);
 
     if (!class_doc || !user_doc) {
@@ -435,7 +444,7 @@ module.exports.classMemberAdd = async (req, res) => {
     })
     user_doc.save()
 
-    
+
 
     res.send({
       code: 200,
@@ -450,6 +459,47 @@ module.exports.classMemberAdd = async (req, res) => {
     res.send({
       code: 500,
       msg: '添加失败'
+    })
+  }
+}
+
+// 上传图片功能
+module.exports.uploadImage = async (req, res) => {
+  try {
+    if (!req.files) {
+      res.send({
+        code: 500,
+        msg: '请上传文件'
+      })
+      return;
+    } else {
+      let files = req.files;
+      let rows = [];
+      for (let file of files) {
+        const {
+          originalname,
+          filename,
+          destination
+        } = file;
+        // 文件后缀
+        const file_ext = `.` + originalname.split(".")[1]
+        const origin_path = path.resolve(process.cwd(), 'public/upload/temp/', filename)
+        const target_path = path.resolve(process.cwd(), 'public/upload/', filename + file_ext)
+        console.log(origin_path, target_path);
+        fs.renameSync(origin_path, target_path);
+        rows.push('upload/' + filename + file_ext)
+      }
+      res.send({
+        code: 200,
+        msg: "上传成功",
+        rows
+      })
+    }
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 500,
+      msg: "上传失败"
     })
   }
 }

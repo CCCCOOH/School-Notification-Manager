@@ -11,6 +11,19 @@ npm install
 npm install
 ```
 
+## 架构
+
+前端： 
+- html
+- css
+- javascript
+- Vue3
+- TailwindCSS
+
+后端：
+- Express
+- Mongoose
+
 ## 🏫 校园通知管理助手 🧑‍💼
 
 > 更新日志

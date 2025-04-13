@@ -1,4 +1,4 @@
-const { listClass, clearClass, removeClass, createClass, updateClass, addNotify, modifyNotify, listNotify, listClassNotify, listNotifyUser, removeNotify, notifyDetail, classMembersGet, classMemberAdd } = require('../controllers/Class')
+const { listClass, clearClass, removeClass, createClass, updateClass, addNotify, modifyNotify, listNotify, listClassNotify, listNotifyUser, removeNotify, notifyDetail, classMembersGet, classMemberAdd, upload, uploadImage } = require('../controllers/Class')
 const express = require('express')
 const router = express.Router()
 
@@ -11,6 +11,7 @@ router.post('/create', createClass)
 router.post('/update', updateClass)
 router.post('/notify/add', addNotify)
 router.post('/member/add', classMemberAdd)
+router.post('/uploadImage', uploadImage)
 router.put('/notify/modify', modifyNotify)
 router.delete('/clear', clearClass)
 router.delete('/remove', removeClass)

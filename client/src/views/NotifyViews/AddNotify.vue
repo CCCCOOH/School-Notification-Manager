@@ -1,17 +1,20 @@
 <template>
   <div class="p-2">
     <div class="mb-3">
-      <h1 class="inline text-gray-700">标题：</h1>
+      <h1 class="inline text-sky-700">标题：</h1>
       <input v-model="addForm.title" type="text"
         class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 w-full transition"
         placeholder="请输入通知标题..">
     </div>
+    <div class="mb-3">
+      <h1 class="inline text-sky-700">封面海报：</h1>
+      <input type="file" accept="image/*"
+        class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 w-full transition"
+        placeholder="请输入通知标题..">
+    </div>
     <div>
-      <h1 class="inline text-gray-700">内容：</h1>
+      <h1 class="inline text-sky-700">内容：</h1>
       <WangEditor v-model="addForm.content" />
-      <!-- <textarea type="text" v-model="addForm.content"
-        class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 min-h-30 w-full transition"
-        placeholder="请输入通知内容.." /> -->
       <ul class="flex gap-3 py-2">
         <li>
           <label for="level" class="text-sky-700">优先级：</label>
@@ -46,7 +49,6 @@
 import WangEditor from '@/components/WangEditor.vue';
 import { useClassDetailStore } from '@/stores/classDetail';
 import { useUserStore } from '@/stores/user';
-import { watch } from 'vue';
 import { computed } from 'vue';
 import { inject, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
