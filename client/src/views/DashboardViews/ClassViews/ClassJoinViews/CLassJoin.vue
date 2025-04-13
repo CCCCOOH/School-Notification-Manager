@@ -11,8 +11,9 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
 import { inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-
+const router = useRouter();
 const axios = inject('axios')
 const confirm = inject('confirm')
 const close = inject('close')
@@ -36,10 +37,12 @@ async function onJoinButton() {
   if (res.data.code == 200) {
     confirm('提示', '加入成功', true, () => {
       close()
+      router.push({name: 'classList'})
     })
   } else {
     confirm('警告', '加入失败，请确保ID正确', true, () => {
       close()
+      router.push({name: 'classList'})
     })
   }
   class_id.value = ''

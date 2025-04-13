@@ -1,20 +1,28 @@
 <template>
   <ul class="p-3">
+    <!-- 班级标题 -->
     <label for="title" class="block text-sm my-2">班级名</label>
-    <input id="title" class="pl-4 transition outline-2 outline-gray-400 text-gray-600 rounded p-1 focus:outline-indigo-500" placeholder="输入班级名..."
+    <p v-if="!isEdit" class="text-gray-600">{{ classDetail.className }}</p>
+    <input v-if="isEdit" id="title" class="pl-4 transition outline-2 outline-gray-400 text-gray-600 rounded p-1 focus:outline-indigo-500" placeholder="输入班级名..."
       v-model="classDetail.className">
     <hr class="mt-3 text-gray-300">
 
+
+    <!-- 班级描述 -->
     <label for="description" class="block text-sm my-2">描述</label>
-    <input id="description" class="transition w-full outline-2 outline-gray-400 text-gray-600 rounded p-1 focus:outline-indigo-500 pl-4" placeholder="输入班级描述..."
+    <p class="text-gray-600" v-if="!isEdit">{{ classDetail.description }}</p>
+    <p class="text-gray-600" v-if="!classDetail.description && !isEdit">这个班级还没有描述哦...</p>
+    <input v-if="isEdit" id="description" class="transition w-full outline-2 outline-gray-400 text-gray-600 rounded p-1 focus:outline-indigo-500 pl-4" placeholder="输入班级描述..."
       v-model="classDetail.description">
     <hr class="mt-3 text-gray-300">
 
     <div class="flex gap-2">
-      <button @click="updateClassDetail"
-        class="rounded-2xl bg-sky-500 px-3 py-1 text-white hover:bg-sky-400 mt-2 cursor-pointer active:bg-green-500 transition">保存</button>
+      <button v-if="!isEdit" @click="isEdit=!isEdit"
+        class="rounded bg-sky-500 px-3 py-1 text-white hover:bg-sky-400 mt-2 cursor-pointer active:bg-green-500 transition">编辑</button>
+      <button v-if="isEdit" @click="updateClassDetail"
+        class="rounded bg-sky-500 px-3 py-1 text-white hover:bg-sky-400 mt-2 cursor-pointer active:bg-green-500 transition">保存</button>
       <button @click="deleteClass"
-        class="rounded-2xl bg-red-500 px-3 py-1 text-white hover:bg-red-400 mt-2 cursor-pointer active:bg-purple-500 transition">删除</button>
+        class="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-400 mt-2 cursor-pointer active:bg-purple-500 transition">删除</button>
     </div>
   </ul>
 </template>
@@ -23,13 +31,14 @@
 import { useClassDetailStore } from '@/stores/classDetail';
 import { useUserStore } from '@/stores/user';
 import { inject, onMounted, reactive, ref } from 'vue';
-import Modal from '@/components/Modal.vue';
 import { useRouter } from 'vue-router';
 
 const confirm = inject('confirm')
 const close = inject('close')
 const axios = inject('axios')
 
+
+const isEdit = ref(false)
 const router = useRouter();
 
 let classDetail = ref({}, { deep: true });

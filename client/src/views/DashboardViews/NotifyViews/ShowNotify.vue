@@ -3,7 +3,7 @@
     <ul class="transition flex gap-5 p-3 overflow-auto flex-wrap">
       <!-- 单个通知 -->
       <TransitionGroup enter-from-class="opacity-0 scale-90">
-        <NotifyCard v-for="(item) in data" :data="item" :key="item" class="w-100 h-fit" />
+        <NotifyCard v-for="(item) in data" :data="item" @click="toggleCollapse(item)" v-model:collapse="item.collapse" :key="item" class="w-100 h-fit" />
       </TransitionGroup>
     </ul>
   </div>
@@ -31,9 +31,21 @@ const data = ref([
   // },
 ])
 
+function toggleCollapse(item) {
+  data.value.forEach(otherItem => {
+    if (otherItem != item) {
+      otherItem.collapse = true
+    }
+  })
+  item.collapse = !item.collapse
+}
+
 onMounted(async () => {
   const user_id = userStore.userDatas._id;
   const res = await axios.get(`class/notify_user?user_id=${user_id}`)
   data.value = res.data.rows;
+  data.value.forEach(item => {
+    item.collapse = true
+  })
 })
 </script>

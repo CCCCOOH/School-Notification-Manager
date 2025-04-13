@@ -1,7 +1,4 @@
 import {
-  reactive
-} from "vue";
-import {
   defineStore
 } from 'pinia'
 import { ref } from "vue";

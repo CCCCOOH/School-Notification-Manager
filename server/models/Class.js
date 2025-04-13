@@ -46,6 +46,19 @@ const ClassSchema = new mongoose.Schema({
   },
   notifies: {
     type: [{
+      readList: {
+        type: [{
+          _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+          },
+          readAt: {
+            type: Date,
+            default: Date.now()
+          },
+        }],
+        default: []
+      },
       title: {
         type: String,
         required: true

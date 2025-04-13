@@ -416,6 +416,7 @@ module.exports.classMemberAdd = async (req, res) => {
         code: 500,
         msg: '字段不能为空'
       })
+      return;
     }
 
     const class_doc = await ClassModel.findById(class_id);
@@ -505,6 +506,66 @@ module.exports.uploadImage = async (req, res) => {
     res.send({
       code: 500,
       msg: "上传失败"
+    })
+  }
+}
+
+// 添加已读用户
+module.exports.addRead = async (req, res) => {
+  try {
+    const {
+      class_id,
+      user_id,
+      notify_id
+    } = req.body;
+    const classDoc = await ClassModel.findById(class_id);
+    const userDoc = await UserModel.findById(user_id)
+    const notifyIndex = classDoc.notifies.findIndex(item => item._id == notify_id)
+    const hasUser = classDoc.notifies[notifyIndex].readList.find(user => user._id == user_id)
+
+    if (hasUser) {
+      res.send({
+        code: 500,
+        msg: '不可重复已读'
+      })
+      return;
+    }
+
+    classDoc.notifies[notifyIndex].readList.push({
+      _id: user_id,
+    })
+    await classDoc.save();
+
+    return res.send({
+      code: 200,
+      msg: '已读成功',
+      row: classDoc
+    })
+  } catch (error) {
+    console.error(error);
+    res.send({
+      code: 500,
+      msg: '已读失败'
+    })
+  }
+}
+
+// 获取班级下对应通知的已读用户
+module.exports.getRead = async (req, res) => {
+  try {
+    const {class_id, notify_id} = req.query;
+    const classDoc = await ClassModel.findById(class_id);
+    const notifyObj = classDoc.notifies.find(item => item._id = notify_id);
+    return res.send({
+      code: 200,
+      msg: '获取已读成功',
+      row: notifyObj
+    })
+  } catch (error) {
+    console.error(error);
+    return res.send({
+      code: 500,
+      msg: '获取已读失败'
     })
   }
 }

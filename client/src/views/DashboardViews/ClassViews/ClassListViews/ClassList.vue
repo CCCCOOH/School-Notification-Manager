@@ -3,10 +3,10 @@
     <ul class="p-2 flex gap-2 flex-wrap">
       <TransitionGroup enter-from-class="opacity-0 scale-80" enter-to-class="opacity-100 scale-100">
         <li v-for="cla in classesList" :key="cla._id"
-          class="cursor-pointer relative transition w-70 h-20 rounded bg-white hover:shadow-sm border border-gray-200 flex flex-col pt-4 items-center mb-5" @click="toManageNotify(cla)">
-          <h1 class="font-bold">{{ cla.className }}</h1>
+          class="cursor-pointer relative transition w-70 h-20 rounded bg-white hover:shadow-sm border border-gray-200 flex flex-col pt-4 items-center mb-5">
+          <h1 class="font-bold" @click="toManageNotify(cla)">{{ cla.className }}</h1>
           <div v-if="cla.createdBy == userStore.userDatas._id" class="w-full text-sky-600 flex justify-center items-center" title="权限">
-            <span class="bg-sky-500 rounded-2xl px-5 text-white">管理员</span>
+            <span @click="toManageNotify(cla)" class="bg-sky-500 rounded-2xl px-5 text-white">管理员</span>
           </div>
           <div v-else title="权限" class="w-full text-sky-600 flex justify-center items-center">
             <span class="bg-green-500 rounded-2xl px-5 text-white">成员</span>
