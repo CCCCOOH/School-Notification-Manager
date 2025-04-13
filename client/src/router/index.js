@@ -1,94 +1,109 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory
+} from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(
+    import.meta.env.BASE_URL),
   routes: [
+    // 首页（登陆页面）
     {
       path: '/',
       name: 'home',
       component: () => import('../views/LoginView.vue'),
     },
+    // 面板页面
     {
-      path: '/user',
-      name: 'user',
-      component: () => import('../views/PanelView.vue'),
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/DashboardViews/DashboardView.vue'),
       children: [
+        // 通知查看页面
         {
-          path: 'notify',
+          path: '/notify',
           name: 'notify',
-          component: () => import('../views/NotifyViews/ShowNotify.vue')
+          component: () => import('../views/DashboardViews/NotifyViews/ShowNotify.vue')
         },
+        // 班级查看与管理页面
         {
-          path: 'class',
+          path: '/class',
           name: 'class',
-          component: () => import('../views/ClassView.vue'),
+          component: () => import('../views/DashboardViews/ClassViews/ClassView.vue'),
           children: [
+            // 班级列表
             {
-              path: 'list',
+              path: 'classList',
               name: 'classList',
-              component: () => import('../views/ClassViews/ClassList.vue')
+              component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassList.vue'),
             },
+            // 创建班级
             {
-              path: 'create',
+              path: 'createClass',
               name: 'createClass',
-              component: () => import('../views/ClassViews/ClassCreate.vue')
+              component: () => import('../views/DashboardViews/ClassViews/ClassCreateViews/ClassCreateView.vue')
             },
-            {
-              path: 'detail',
-              name: 'classDetail',
-              component: () => import('../views/ClassViews/ClassDetail.vue')
-            },
-            {
-              path: 'manageClassNotify',
-              name: 'manageClassNotify',
-              component: () => import('../views/NotifyViews/ManageClassNotify.vue'),
-              children: [
-                {
-                  path: 'manageNotifyList',
-                  name: 'manageNotifyList',
-                  component: () => import('../views/NotifyViews/ManageNotifyList.vue')
-                },
-                {
-                  path: 'addNotify',
-                  name: 'addNotify',
-                  component: () => import('../views/NotifyViews/AddNotify.vue')
-                },
-                {
-                  path: 'editNotify',
-                  name: 'editNotify',
-                  component: () => import('../views/NotifyViews/UpdateNotify.vue')
-                },
-              ]
-            },
-            {
-              path: 'manageClassMember',
-              name: 'manageClassMember',
-              component: () => import('../views/MemberView.vue')
-            },
+            // 加入班级
             {
               path: 'joinClass',
               name: 'joinClass',
-              component: () => import('../views/ClassViews/CLassJoin.vue')
+              component: () => import('../views/DashboardViews/ClassViews/ClassJoinViews/CLassJoin.vue')
             },
-
+            // 编辑班级信息
+            {
+              path: 'classEdit',
+              name: 'ClassEdit',
+              component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassEditViews/ClassEdit.vue')
+            },
+            // 管理班级通知
+            {
+              path: 'ManageClassNotify',
+              name: 'ManageClassNotify',
+              component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassNotifyViews/ClassNotify.vue'),
+              children: [
+                {
+                  path: 'manageNotifyList',
+                  name: 'ManageNotifyList',
+                  component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassNotifyViews/ManageViews/NotifyManageView.vue')
+                },
+                {
+                  path: 'addNotify',
+                  name: 'AddNotify',
+                  component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassNotifyViews/AddViews/NotifyAddView.vue')
+                },
+                {
+                  path: 'editNotify',
+                  name: 'EditNotify',
+                  component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassNotifyViews/UpdateViews/UpdateNotify.vue')
+                },
+              ]
+            },
+            // 管理班级成员
+            {
+              path: '/ManageClassMember',
+              name: 'ManageClassMember',
+              component: () => import('../views/DashboardViews/ClassViews/ClassListViews/ClassMemberViews/MemberView.vue')
+            },
           ]
         },
+        // 用户详情页
         {
-          path: 'userinfo',
-          name: 'userinfo',
-          component: () => import('../views/UserViews/InfoView.vue')
+          path: 'userInfo',
+          name: 'userInfo',
+          component: () => import('../views/DashboardViews/PersonalViews/PersonalView.vue')
         },
       ]
     },
+    // 隐私政策页面
     {
       path: '/privacy',
       name: 'privacy',
-      component: () => import('../views/PrivacyPolicyView.vue')
+      component: () => import('../views/PrivacyViews/PrivacyPolicyView.vue')
     },
     {
       path: '/privacyCommunity',
       name: 'privacyCommunity',
-      component: () => import('../views/CommunityPolicyView.vue')
+      component: () => import('../views/PrivacyViews/CommunityPolicyView.vue')
     },
   ],
 })

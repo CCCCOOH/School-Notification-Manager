@@ -24,3 +24,5 @@ app.use('/api/class', require('./routes/Class'))
 app.listen(8080, () => {
     console.log("http://localhost:8080");
 })
+
+// /www/wwwroot/Node.js-Blog/server/public

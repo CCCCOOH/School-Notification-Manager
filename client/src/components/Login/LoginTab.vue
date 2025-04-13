@@ -97,6 +97,7 @@ onMounted(() => {
   }
 })
 
+// 注册按钮事件
 const onRegisterButton = async () => {
   // 表单验证不通过弹出弹窗
   if (registerForm.username.trim() == '' || registerForm.password.trim() == '' || registerForm.email.trim() == '') {
@@ -120,6 +121,7 @@ const onRegisterButton = async () => {
   }
 }
 
+// 登陆按钮事件
 const onLoginButton = async () => {
   if (loginForm.username == '' || loginForm.password == '') {
     confirm('提示', '请填写表单', false)

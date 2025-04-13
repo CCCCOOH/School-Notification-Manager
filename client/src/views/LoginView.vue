@@ -5,7 +5,7 @@
       <!-- 上方logo -->
       <Logo />
       <!-- 下方内容 -->
-      <div class="flex w-250 h-100 max-md:w-full">
+      <div class="flex h-100 max-md:w-full">
         <!-- 左侧容器 -->
         <div class="flex-2 pr-10 max-md:hidden">
             <!-- 卡片 -->

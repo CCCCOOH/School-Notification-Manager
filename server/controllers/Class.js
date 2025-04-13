@@ -157,7 +157,8 @@ module.exports.addNotify = async (req, res) => {
       time,
       content,
       level,
-      categories
+      categories,
+      postUrl
     } = req.body;
     const row = await ClassModel.findOne({
       $and: [{
@@ -174,7 +175,8 @@ module.exports.addNotify = async (req, res) => {
         time,
         content,
         level,
-        categories
+        categories,
+        postUrl
       })
       await row.save();
       res.send({
@@ -208,7 +210,8 @@ module.exports.modifyNotify = async (req, res) => {
       time,
       content,
       level,
-      categories
+      categories,
+      postUrl
     } = req.body;
     const row = await ClassModel.findOne({
       $and: [{
@@ -232,6 +235,7 @@ module.exports.modifyNotify = async (req, res) => {
       notify.time = time
       notify.content = content
       notify.level = level
+      notify.postUrl = postUrl
       notify.categories = categories
       await row.save();
       res.send({
@@ -494,6 +498,7 @@ module.exports.uploadImage = async (req, res) => {
         msg: "上传成功",
         rows
       })
+      return;
     }
   } catch (error) {
     console.error(error);
