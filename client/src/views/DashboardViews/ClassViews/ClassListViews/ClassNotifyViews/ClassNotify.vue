@@ -2,7 +2,7 @@
   <div class="p-2">
     <div class="flex">
       <h1 class="flex-1 text-blue-800 items-center flex">{{ className }}</h1>
-      <div class="flex-1 flex justify-end gap-2 items-center">
+      <div v-if="user_id==creator_id" class="flex-1 flex justify-end gap-2 items-center">
         <router-link :to="{name: 'ManageNotifyList'}" active-class="bg-gray-200"
           class="border border-gray-300 rounded text-gray-800 hover:bg-gray-100 cursor-pointer active:bg-gray-200 px-2 py-1">管理通知</router-link>
         <router-link :to="{name: 'AddNotify'}" active-class="bg-gray-200"
@@ -20,12 +20,18 @@
 
 <script setup>
 import { useClassDetailStore } from '@/stores/classDetail';
+import { useUserStore } from '@/stores/user';
 import { onMounted, ref } from 'vue';
 
 const classDetailStore = useClassDetailStore();
+const userStore = useUserStore();
+const user_id = ref('')
+const creator_id = ref('')
 
 const className = ref('')
 onMounted(() => {
   className.value = classDetailStore.manageClassInfo.className;
+  creator_id.value = classDetailStore.manageClassInfo.createdBy;
+  user_id.value = userStore.userDatas._id;
 })
 </script>

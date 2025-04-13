@@ -424,7 +424,7 @@ module.exports.classMemberAdd = async (req, res) => {
     const user_doc = await UserModel.findById(user_id);
 
     const hasUser = class_doc.members.find(item => item._id == user_id);
-
+    
     if (!class_doc || !user_doc) {
       return res.send({
         code: 500,
@@ -518,11 +518,35 @@ module.exports.addRead = async (req, res) => {
       user_id,
       notify_id
     } = req.body;
-    const classDoc = await ClassModel.findById(class_id);
-    const userDoc = await UserModel.findById(user_id)
-    const notifyIndex = classDoc.notifies.findIndex(item => item._id == notify_id)
-    const hasUser = classDoc.notifies[notifyIndex].readList.find(user => user._id == user_id)
 
+    const classDoc = await ClassModel.findById(class_id);
+    if (!classDoc) {
+      res.send({
+        code: 500,
+        msg: '不存在该班级'
+      })
+      return;
+    }
+
+    const userDoc = await UserModel.findById(user_id)
+    if (!userDoc) {
+      res.send({
+        code: 500,
+        msg: '不存在用户'
+      })
+      return;
+    }
+
+    const notifyIndex = classDoc.notifies.findIndex(item => item._id == notify_id)
+    if (notifyIndex == -1) {
+      res.send({
+        code: 500,
+        msg: '不存在的通知'
+      })
+      return;
+    }
+
+    const hasUser = classDoc.notifies[notifyIndex].readList.find(user => user._id == user_id)
     if (hasUser) {
       res.send({
         code: 500,
@@ -553,13 +577,42 @@ module.exports.addRead = async (req, res) => {
 // 获取班级下对应通知的已读用户
 module.exports.getRead = async (req, res) => {
   try {
-    const {class_id, notify_id} = req.query;
+    const {
+      class_id,
+      notify_id
+    } = req.query;
+
     const classDoc = await ClassModel.findById(class_id);
-    const notifyObj = classDoc.notifies.find(item => item._id = notify_id);
+    if (!classDoc) {
+      return res.send({
+        code: 500,
+        msg: '不存在该班级'
+      })
+    }
+
+    const notifyObj = classDoc.notifies.find(item => item._id == notify_id);
+    if (!notifyObj) {
+      return res.send({
+        code: 500,
+        msg: '不存在该通知'
+      })
+    }
+
+    const readList = notifyObj.readList.map(item => item._id)
+
+    const readUsers = await UserModel.find({
+      _id: {
+        $in: readList
+      }
+    }, {
+      username: true,
+      fullname: true
+    })
+
     return res.send({
       code: 200,
       msg: '获取已读成功',
-      row: notifyObj
+      rows: readUsers,
     })
   } catch (error) {
     console.error(error);

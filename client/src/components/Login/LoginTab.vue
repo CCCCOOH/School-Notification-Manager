@@ -9,8 +9,8 @@
       <input type="password"
         class="font-medium border-none outline outline-gray-300 transition focus:outline-gray-400 active:border active:outline w-full bg-gray-200 rounded px-3 py-2"
         placeholder="密码" v-model="loginForm.password">
-      <button @click="onLoginButton"
-        class="transition bg-green-600 hover:brightness-110 rounded py-2 text-white cursor-pointer hover:outline">登陆</button>
+      <button @click="onLoginButton" :disabled="waitLogin"
+        class="transition bg-green-600 hover:brightness-110 rounded py-2 text-white cursor-pointer hover:outline">{{ waitLogin ? '登陆中...' : '登陆' }}</button>
       <div class="flex justify-between border-b hover:border-indigo-400 transition">
         <span class="font-light cursor-pointer hover:text-gray-500 active:text-gray-600"
           @click="logTab = !logTab">还未注册？</span>
@@ -74,6 +74,7 @@ const registerForm = reactive({
   password: '',
   email: ''
 })
+const waitLogin = ref(false)
 const loginForm = reactive({
   username: '',
   password: ''
@@ -128,7 +129,9 @@ const onLoginButton = async () => {
     return;
   } else {
     try {
+      waitLogin.value = true
       const res = await axios.post('/user/login', loginForm);
+      waitLogin.value = false
 
       if (res.data.code == 500) {
         modalData.show = true;

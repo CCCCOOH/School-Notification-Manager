@@ -40,7 +40,7 @@ async function onJoinButton() {
       router.push({name: 'classList'})
     })
   } else {
-    confirm('警告', '加入失败，请确保ID正确', true, () => {
+    confirm('警告', res.data.msg, true, () => {
       close()
       router.push({name: 'classList'})
     })

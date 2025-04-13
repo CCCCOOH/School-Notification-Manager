@@ -1,9 +1,12 @@
 <template>
   <ul class="p-2 flex flex-col gap-5 *:flex *:flex-col *:gap-2">
+    <Teleport to="body">
+      <div v-if="waitUpload" class="absolute left-1/2 top-1/2 text-white animate-ping">上传中...</div>
+    </Teleport>
     <li>
       <label for="title" class="text-sky-700 w-full">标题：</label>
       <input id="title" placeholder="请输入新的通知标题(不能为空)" type="text" v-model="updateForm.title"
-        class="font-bold w-full pl-2 outline-none border-b-2 transition border-gray-300 focus:border-indigo-500">
+      class="font-bold w-full pl-2 outline-none border-b-2 transition border-gray-300 focus:border-indigo-500">
     </li>
     <li>
       <div class="flex" v-if="updateForm.postUrl">
@@ -49,6 +52,7 @@
 <script setup>
 import WangEditor from '@/components/WangEditor.vue';
 import { useUserStore } from '@/stores/user';
+import { watch } from 'vue';
 import { inject, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
@@ -64,15 +68,23 @@ const userStore = useUserStore();
 
 const showPost = ref(false)
 const updateForm = reactive({
-  title: '',
+  title: '加载中...',
   content: '',
   level: '3',
   postUrl: '',
   categories: []
 })
+const waitUpload = ref(false)
 
 const categoriesInput = ref('')
 
+watch(waitUpload, (newVal) => {
+  if (newVal == true) {
+    document.querySelector('#app').classList.add('brightness-50')
+  } else {
+    document.querySelector('#app').classList.remove('brightness-50')
+  }
+})
 
 onMounted(async () => {
   const { class_id, notify_id } = route.query;
@@ -88,12 +100,16 @@ onMounted(async () => {
 async function handleFileChange(event) {
   const files = event.target.files;
 
+  waitUpload.value = true;
   const res = await axios.post('class/uploadImage', files, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
+  waitUpload.value = false;
   
   if (res.data.code == 200) {
-    confirm('提示', res.data.msg, false);
+    confirm('提示', res.data.msg, true, () => {
+      close()
+    });
     updateForm.postUrl = 'http://' + server_url + '/' + res.data.rows[0];
   } else {
     confirm('警告', res.data.msg)

@@ -10,7 +10,9 @@
     </header>
     <h1 class="p-2 text-gray-500">班级成员：</h1>
     <ul class="w-full h-fit flex gap-2 flex-wrap p-2">
-      <li v-for="item in members" :key="item" class="rounded-full bg-sky-500 size-10 flex justify-center items-center text-white"><span>{{item.username.slice(0, 2)}}</span></li>
+      <TransitionGroup enter-active-class="transition" enter-from-class="opacity-0 scale-80">
+        <li v-for="item in members" :key="item" class="rounded-full bg-sky-500 size-10 flex justify-center items-center text-white"><span>{{item.username.slice(0, 2)}}</span></li>
+      </TransitionGroup>
     </ul>
   </div>
 </template>

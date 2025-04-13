@@ -36,6 +36,19 @@
             </ul>
           </div>
         </div>
+        <div v-else class="flex w-full pt-2 justify-center">
+          <button @click="onConfirmRead(item)"
+            class="bg-green-600 hover:brightness-110 active:brightness-105 cursor-pointer rounded text-white px-2">确认阅读</button>
+        </div>
+        <!-- 已读列表 -->
+        <div v-if="item.readList.length" class="bg-gray-200 flex rounded mt-2 px-2 py-3">
+          <span class="text-sky-800 block">已读列表：</span>
+          <ul>
+            <li class="inline text-sky-600">{{
+              item.readList.map(item => item.fullname ? item.fullname : item.username).join('、')}}</li>
+          </ul>
+        </div>
+        <p v-else class="text-sm text-gray-500">暂时还没有人阅读</p>
       </li>
     </TransitionGroup>
   </ul>
@@ -54,7 +67,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const classDetailStore = useClassDetailStore()
 const class_id = ref('')
-const notifies = ref([])
+const notifies = ref([], { deep: true })
 
 const axios = inject('axios')
 const confirm = inject('confirm')
@@ -77,11 +90,15 @@ async function getNotifies() {
 
   notifies.value = res.data.row.notifies;
   notifies.value.forEach(item => { item.collapsed = true });
+
+  notifies.value.forEach(async (notify) => {
+    notify.readList = await getReadList(notify);
+  })
 }
 
 onMounted(async () => {
   await nextTick()
-  getNotifies();
+  await getNotifies();
 })
 
 // 不同等级不同样式
@@ -90,6 +107,26 @@ const levelClass = reactive({
   2: 'transition hover:bg-white hover:text-purple-700 border px-1 rounded text-white bg-purple-700',
   3: 'transition hover:bg-white hover:text-blue-700 border px-1 rounded text-white bg-blue-700',
 })
+
+// 已读按钮
+async function onConfirmRead(notify_item) {
+  const user_id = userStore.userDatas._id;
+  const res = await axios.post('class/addRead', {
+    user_id,
+    class_id: class_id.value,
+    notify_id: notify_item._id
+  })
+  if (res.data.code == 200) {
+    confirm('提示', res.data.msg, true, async () => {
+      await getNotifies();
+      close();
+    })
+  } else {
+    confirm('提示', res.data.msg, false, async () => {
+      close();
+    })
+  }
+}
 
 // 点击删除按钮
 async function onRemoveNotifyButton(item) {
@@ -101,6 +138,7 @@ async function onRemoveNotifyButton(item) {
   })
 }
 
+// 编辑通知按钮
 async function onEditButton(item) {
   router.push({
     name: 'EditNotify',
@@ -109,5 +147,11 @@ async function onEditButton(item) {
       notify_id: item._id
     }
   })
+}
+
+// 获取通知的已阅人员
+async function getReadList(notify_item) {
+  const res = await axios.get(`class/getRead?class_id=${class_id.value}&notify_id=${notify_item._id}`)
+  return res.data.rows
 }
 </script>

@@ -39,7 +39,11 @@ const options = reactive({
 const visible = ref(false)
 
 watch(visible, (newVal) => {
-  document.querySelector('#app').classList.toggle('brightness-50')
+  if (newVal == true) {
+    document.querySelector('#app').classList.add('brightness-50')
+  } else {
+    document.querySelector('#app').classList.remove('brightness-50')
+  }
 })
 
 async function close() {

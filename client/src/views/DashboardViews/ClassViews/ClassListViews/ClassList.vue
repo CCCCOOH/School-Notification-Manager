@@ -9,7 +9,7 @@
             <span @click="toManageNotify(cla)" class="bg-sky-500 rounded-2xl px-5 text-white">管理员</span>
           </div>
           <div v-else title="权限" class="w-full text-sky-600 flex justify-center items-center">
-            <span class="bg-green-500 rounded-2xl px-5 text-white">成员</span>
+            <span @click="toManageNotify(cla)" class="bg-green-500 rounded-2xl px-5 text-white">成员</span>
           </div>
           <!-- 三个管理按钮 -->
           <div v-if="cla.createdBy == userStore.userDatas._id" class="flex mt-2 w-full">

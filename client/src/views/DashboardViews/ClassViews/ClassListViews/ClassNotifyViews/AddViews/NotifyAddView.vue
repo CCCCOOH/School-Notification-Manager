@@ -50,8 +50,10 @@ import WangEditor from '@/components/WangEditor.vue';
 import { useClassDetailStore } from '@/stores/classDetail';
 import { useUserStore } from '@/stores/user';
 import { computed } from 'vue';
+import { watch } from 'vue';
 import { inject, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import moment from 'moment';
 
 const confirm = inject('confirm');
 const close = inject('close')
@@ -60,8 +62,11 @@ const classDetailStore = useClassDetailStore();
 const userStore = useUserStore();
 const router = useRouter();
 const server_url = inject('server_url')
-const date = ref('')
-const time = ref('')
+
+
+const date = ref(moment().format('YYYY-MM-DD'))
+const time = ref(moment().format('hh:mm'))
+
 
 // 添加表单
 const addForm = reactive({
@@ -109,6 +114,9 @@ async function onAddButton() {
   if (categoriesInput.value !== '') {
     addForm.categories = categoriesInput.value.split(' ');
   }
+
+  console.log(dateObj.value);
+  
 
   if (dateObj.value == 'Invalid Date') {
     confirm('警告', '日期表单格式错误', true, () => { close() })
