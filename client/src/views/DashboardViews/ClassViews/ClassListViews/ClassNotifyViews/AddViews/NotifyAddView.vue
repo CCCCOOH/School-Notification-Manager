@@ -6,12 +6,28 @@
         class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 w-full transition"
         placeholder="请输入通知标题..">
     </div>
+
+    <div class="mb-3">
+      <h1 class="inline text-sky-700">提示词：</h1>
+      <ul class="flex items-center gap-2 min-h-22 w-full">
+        <textarea v-model="userTip" :disabled="isDeepSeek"
+          class="min-h-20 disabled:animate-pulse rounded outline-2 outline-gray-300 max-h-50 h-20 px-2 bg-gray-100 focus:outline-2 focus:outline-sky-500 w-full transition"
+          placeholder="请输入你的通知信息以及要求..." />
+        <!-- 一键生成按钮 -->
+        <button :disabled="isDeepSeek" class="disabled:animate-pulse bg-green-700 rounded w-50 text-white px-2 h-20 cursor-pointer hover:brightness-110"
+          @click="createNotification">{{ isDeepSeek ? 'DeepSeek正在思考中...' : 'DeepSeek 一键生成' }}</button>
+      </ul>
+
+    </div>
+
+
     <div class="mb-3">
       <h1 class="inline text-sky-700">封面海报：</h1>
       <input type="file" accept="image/*" @change="handleFileChange"
-        class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 w-full transition"
-        placeholder="请输入通知标题..">
+        class="p-2 rounded outline-2 outline-gray-300 bg-gray-100 focus:outline-2 focus:outline-sky-500 w-full transition">
     </div>
+
+
     <div>
       <h1 class="inline text-sky-700">内容：</h1>
       <WangEditor v-model="addForm.content" />
@@ -50,7 +66,6 @@ import WangEditor from '@/components/WangEditor.vue';
 import { useClassDetailStore } from '@/stores/classDetail';
 import { useUserStore } from '@/stores/user';
 import { computed } from 'vue';
-import { watch } from 'vue';
 import { inject, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import moment from 'moment';
@@ -67,6 +82,7 @@ const server_url = inject('server_url')
 const date = ref(moment().format('YYYY-MM-DD'))
 const time = ref(moment().format('hh:mm'))
 
+const userTip = ref('')
 
 // 添加表单
 const addForm = reactive({
@@ -91,6 +107,25 @@ const dateObj = computed(() => {
   return dateObj;
 })
 
+const isDeepSeek = ref(false);
+// 一键生成通知按钮
+async function createNotification() {
+  isDeepSeek.value = true;
+  confirm('提示', '请耐心等待DeepSeek思考...', false)
+  const res = await axios.post('deepseek/createNotification', {
+    tips: userTip.value
+  })
+  isDeepSeek.value = false;
+  if (res.data.code == 200) {
+    confirm('提示', '自动生成成功', true, () => {
+      addForm.content = addForm.content += res.data.row
+      close();
+    })
+  } else {
+    confirm('提示', res.data.msg, false)
+  }
+}
+
 // 处理上传海报图片表单变动
 async function handleFileChange(event) {
   const files = event.target.files;
@@ -99,7 +134,7 @@ async function handleFileChange(event) {
   })
   if (res.data.code == 200) {
     confirm('提示', res.data.msg, false);
-    addForm.postUrl = 'http://'+server_url+'/'+res.data.rows[0];
+    addForm.postUrl = 'http://' + server_url + '/' + res.data.rows[0];
   } else {
     confirm('警告', res.data.msg)
   }
@@ -115,8 +150,6 @@ async function onAddButton() {
     addForm.categories = categoriesInput.value.split(' ');
   }
 
-  console.log(dateObj.value);
-  
 
   if (dateObj.value == 'Invalid Date') {
     confirm('警告', '日期表单格式错误', true, () => { close() })
